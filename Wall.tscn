@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3wall_node_01"]
+
+[ext_resource type="Script" path="res://wall.gd" id="1_wall"]
+
+[node name="Wall" type="StaticBody2D"]
+script = ExtResource("1_wall")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
