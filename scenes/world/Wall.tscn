@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cs0pwd20afck7"]
+
+[ext_resource type="Script" uid="uid://j8m1755fpj5q" path="res://scenes/world/wall.gd" id="1_wall"]
+[ext_resource type="Shader" uid="uid://xllrjpj0km36" path="res://assets/shaders/sonar.gdshader" id="2_xi624"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_u66h2"]
+light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_02ypc"]
+shader = ExtResource("2_xi624")
+shader_parameter/wave_centers = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_radii = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_thicknesses = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_intensities = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/active_waves_count = 0
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/reveal_alpha = 0.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2eyed"]
+polygon = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+
+[node name="Wall" type="StaticBody2D" unique_id=910841999]
+script = ExtResource("1_wall")
+polygon_points = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1410086606]
+polygon = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1712734131]
+material = SubResource("CanvasItemMaterial_u66h2")
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1607758536]
+material = SubResource("ShaderMaterial_02ypc")
+points = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50, -50, -50)
+width = 3.0
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=2050289041]
+occluder = SubResource("OccluderPolygon2D_2eyed")

@@ -47,7 +47,7 @@ func setup_wall() -> void:
 		line_2d.width = 3.0
 		line_2d.default_color = Color.WHITE
 
-		var sonar_shader = load("res://sonar.gdshader")
+		var sonar_shader = load("res://assets/shaders/sonar.gdshader")
 		if sonar_shader:
 			shader_material = ShaderMaterial.new()
 			shader_material.shader = sonar_shader

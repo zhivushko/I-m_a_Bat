@@ -30,6 +30,5 @@ func _draw() -> void:
 		return
 
 	var color = Color(1.0, 1.0, 1.0, current_alpha)
-	# Draw reflecting arc / spark along the surface
 	draw_arc(Vector2.ZERO, current_radius, -PI * 0.4, PI * 0.4, 16, color, 2.0)
 	draw_line(Vector2.ZERO, Vector2.UP * (current_radius * 0.6), color, 1.5)

@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export var speed: float = 220.0
 @export var step_interval: float = 0.4
-@export var sound_wave_scene: PackedScene = preload("res://SoundWave.tscn")
+@export var sound_wave_scene: PackedScene = preload("res://scenes/fx/SoundWave.tscn")
 
 var step_timer: float = 0.0
 

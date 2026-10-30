@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c1echo_point_01"]
 
-[ext_resource type="Script" path="res://echo_point.gd" id="1_echo"]
+[ext_resource type="Script" path="res://scenes/fx/echo_point.gd" id="1_echo"]
 
 [node name="EchoPoint" type="Node2D"]
 script = ExtResource("1_echo")

@@ -9,7 +9,7 @@ extends Node2D
 @onready var area_2d: Area2D = $Area2D
 @onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
 
-var echo_point_scene: PackedScene = preload("res://EchoPoint.tscn")
+var echo_point_scene: PackedScene = preload("res://scenes/fx/EchoPoint.tscn")
 var current_radius: float = 0.0
 var current_intensity: float = 1.0
 

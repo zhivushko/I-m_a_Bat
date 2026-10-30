@@ -4,7 +4,7 @@ extends Node2D
 @onready var player: CharacterBody2D = $Player
 @onready var walls_container: Node2D = $Walls
 
-var wall_scene: PackedScene = preload("res://Wall.tscn")
+var wall_scene: PackedScene = preload("res://scenes/world/Wall.tscn")
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color.BLACK)
