@@ -24,15 +24,19 @@ void fragment() {
 		}
 		float dist = distance(world_position, wave_centers[i]);
 		float r = wave_radii[i];
-		float thick = wave_thicknesses[i];
 
-		float ring_dist = abs(dist - r);
-		if (ring_dist < thick) {
-			float ring_factor = 1.0 - (ring_dist / thick);
-			ring_factor = smoothstep(0.0, 1.0, ring_factor);
-			float current_alpha = ring_factor * wave_intensities[i];
-			if (current_alpha > max_sonar_alpha) {
-				max_sonar_alpha = current_alpha;
+		// Как только фронт волны доходит до пикселя, он полностью подсвечивается
+		if (dist <= r) {
+			float wave_alpha = wave_intensities[i];
+			if (wave_alpha > max_sonar_alpha) {
+				max_sonar_alpha = wave_alpha;
+			}
+		} else if (dist <= r + 30.0) {
+			// Плавная передняя кромка волны
+			float edge_factor = 1.0 - ((dist - r) / 30.0);
+			float wave_alpha = edge_factor * wave_intensities[i];
+			if (wave_alpha > max_sonar_alpha) {
+				max_sonar_alpha = wave_alpha;
 			}
 		}
 	}

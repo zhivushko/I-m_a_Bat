@@ -53,22 +53,24 @@ func setup_wall() -> void:
 			shader_material.shader = sonar_shader
 			line_2d.material = shader_material
 
-func reveal(duration: float = 2.0) -> void:
+func reveal(duration: float = 3.0) -> void:
 	if reveal_tween and reveal_tween.is_running():
 		reveal_tween.kill()
 
 	if shader_material:
 		shader_material.set_shader_parameter("reveal_alpha", 1.0)
-		reveal_tween = create_tween()
+	if line_2d:
+		line_2d.modulate.a = 1.0
+
+	reveal_tween = create_tween()
+	if shader_material:
 		reveal_tween.tween_method(
 			func(val: float): shader_material.set_shader_parameter("reveal_alpha", val),
 			1.0, 0.0, duration
-		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	elif line_2d:
-		line_2d.modulate.a = 1.0
-		reveal_tween = create_tween()
 		reveal_tween.tween_property(line_2d, "modulate:a", 0.0, duration)\
-			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func update_sonar_waves(centers: Array, radii: Array, thicknesses: Array, intensities: Array) -> void:
 	if shader_material:

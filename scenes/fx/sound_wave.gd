@@ -2,8 +2,18 @@ extends Node2D
 
 @export var max_scale: float = 8.0
 @export var max_energy: float = 3.0
-@export var duration: float = 1.5
+@export var expand_duration: float = 0.6  # Время расширения волны на 100% яркости до конца
+@export var fade_duration: float = 1.5    # Время плавного затухания энергии ПОСЛЕ достижения конца
 @export var ray_count: int = 64
+@export var wall_reveal_duration: float = 3.0
+@export var spawn_echo_points: bool = true
+
+# Свойство duration для совместимости с player.gd
+var duration: float:
+	get:
+		return fade_duration
+	set(val):
+		fade_duration = val
 
 @onready var light: PointLight2D = $PointLight2D
 @onready var area_2d: Area2D = $Area2D
@@ -24,13 +34,19 @@ func _ready() -> void:
 	if collision_shape and collision_shape.shape is CircleShape2D:
 		collision_shape.shape.radius = 10.0
 
-	var tween = create_tween().set_parallel(true)
-	tween.tween_property(light, "texture_scale", max_scale, duration)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(light, "energy", 0.0, duration)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	# Последовательная двухфазная анимация волны
+	var tween = create_tween()
 
-	tween.chain().tween_callback(queue_free)
+	# ФАЗА 1: Волна быстро расширяется до края на 100% ПОЛНОЙ яркости
+	tween.tween_property(light, "texture_scale", max_scale, expand_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	# ФАЗА 2: ТОЛЬКО ПОСЛЕ достижения конца энергия волны плавно гаснет до 0
+	tween.tween_property(light, "energy", 0.0, fade_duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	# Удаляем узел после завершения затухания
+	tween.tween_callback(queue_free)
 
 	call_deferred("cast_echolocation_rays")
 
@@ -90,9 +106,9 @@ func cast_echolocation_rays() -> void:
 			var collider = result.collider
 
 			if collider and collider.has_method("reveal"):
-				collider.reveal(2.0)
+				collider.reveal(wall_reveal_duration)
 
-			if echo_point_scene:
+			if spawn_echo_points and echo_point_scene:
 				var echo = echo_point_scene.instantiate()
 				echo.global_position = hit_pos
 				if echo.has_method("setup"):
@@ -101,4 +117,4 @@ func cast_echolocation_rays() -> void:
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.has_method("reveal"):
-		body.reveal(2.0)
+		body.reveal(wall_reveal_duration)

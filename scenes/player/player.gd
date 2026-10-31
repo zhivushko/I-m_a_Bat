@@ -9,6 +9,7 @@ var step_timer: float = 0.0
 @onready var light: PointLight2D = $PointLight2D
 @onready var contour_line: Line2D = $Line2D
 @onready var camera: Camera2D = $Camera2D
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
 	setup_player_visuals()
@@ -34,6 +35,11 @@ func setup_player_visuals() -> void:
 		light.energy = 0.5
 		light.texture_scale = 0.8
 		light.shadow_enabled = false
+
+	if animated_sprite:
+		var mat = CanvasItemMaterial.new()
+		mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		animated_sprite.material = mat
 
 func create_player_glow_texture() -> GradientTexture2D:
 	var tex = GradientTexture2D.new()
@@ -65,11 +71,13 @@ func _physics_process(delta: float) -> void:
 	velocity = input_dir * speed
 	move_and_slide()
 
+	update_animation(input_dir)
+
 	if velocity.length() > 10.0:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
-			spawn_sound_wave(2.5, 1.2, 16, 1.0)
+			spawn_sound_wave(3.0, 1.5, 24, 1.2)
 	else:
 		step_timer = step_interval
 
@@ -80,6 +88,30 @@ func _physics_process(delta: float) -> void:
 	else:
 		set_meta("stomp_triggered_this_frame", false)
 
+func update_animation(input_dir: Vector2) -> void:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return
+
+	var frames = animated_sprite.sprite_frames
+
+	if velocity.length() > 10.0:
+		if animated_sprite:
+			animated_sprite.flip_h = (input_dir.x < 0)
+
+		if frames.has_animation("walk"):
+			animated_sprite.play("walk")
+		elif frames.has_animation("move"):
+			animated_sprite.play("move")
+		elif frames.has_animation("new_animation"):
+			animated_sprite.play("new_animation")
+		elif frames.has_animation("default"):
+			animated_sprite.play("default")
+	else:
+		if frames.has_animation("idle"):
+			animated_sprite.play("idle")
+		elif frames.has_animation("default"):
+			animated_sprite.play("default")
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_SPACE:
@@ -88,6 +120,12 @@ func _unhandled_input(event: InputEvent) -> void:
 func stomp() -> void:
 	spawn_sound_wave(8.5, 3.5, 64, 1.6)
 	shake_camera()
+
+	if animated_sprite and animated_sprite.sprite_frames:
+		if animated_sprite.sprite_frames.has_animation("stomp"):
+			animated_sprite.play("stomp")
+		elif animated_sprite.sprite_frames.has_animation("attack"):
+			animated_sprite.play("attack")
 
 func shake_camera() -> void:
 	if camera:
@@ -105,5 +143,5 @@ func spawn_sound_wave(max_scale: float, energy: float, num_rays: int, duration: 
 	wave.max_scale = max_scale
 	wave.max_energy = energy
 	wave.ray_count = num_rays
-	wave.duration = duration
+	wave.fade_duration = duration
 	get_parent().add_child(wave)

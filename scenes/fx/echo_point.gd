@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var duration: float = 1.8
-@export var max_radius: float = 14.0
+@export var duration: float = 1.4
+@export var max_radius: float = 18.0
 
 var collision_normal: Vector2 = Vector2.UP
 var current_radius: float = 2.0
@@ -9,9 +9,14 @@ var current_alpha: float = 1.0
 
 func setup(normal: Vector2) -> void:
 	collision_normal = normal
-	rotation = normal.angle() + PI / 2.0
+	# Угол нормали указывает от стены обратно к источнику звука
+	rotation = normal.angle()
 
 func _ready() -> void:
+	var mat = CanvasItemMaterial.new()
+	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = mat
+
 	queue_redraw()
 
 	var tween = create_tween().set_parallel(true)
@@ -30,5 +35,9 @@ func _draw() -> void:
 		return
 
 	var color = Color(1.0, 1.0, 1.0, current_alpha)
-	draw_arc(Vector2.ZERO, current_radius, -PI * 0.4, PI * 0.4, 16, color, 2.0)
-	draw_line(Vector2.ZERO, Vector2.UP * (current_radius * 0.6), color, 1.5)
+	# Дуга отражения расходится обратно в сторону игрока / источника шума
+	draw_arc(Vector2.ZERO, current_radius, -PI * 0.45, PI * 0.45, 16, color, 2.0)
+
+	if current_radius > 4.0:
+		var inner_color = Color(1.0, 1.0, 1.0, current_alpha * 0.5)
+		draw_arc(Vector2.ZERO, current_radius * 0.5, -PI * 0.35, PI * 0.35, 12, inner_color, 1.5)
