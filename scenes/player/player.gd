@@ -165,7 +165,7 @@ func stomp() -> void:
 	if is_dead:
 		return
 	play_screech_sound()
-	spawn_sound_wave(8.5, 3.5, 64, 1.5)
+	spawn_sound_wave(2, 1, 64, 1)
 	shake_camera()
 
 	if animated_sprite and animated_sprite.sprite_frames:
@@ -191,6 +191,8 @@ func spawn_sound_wave(max_scale: float, energy: float, num_rays: int, duration: 
 	wave.max_energy = energy
 	wave.ray_count = num_rays
 	wave.fade_duration = duration
+	wave.max_radius = 100
+	print("[player] max_radius set to ", wave.max_radius)
 	get_parent().add_child(wave)
 
 func die() -> void:
