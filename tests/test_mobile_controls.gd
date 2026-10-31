@@ -50,9 +50,10 @@ func run() -> void:
 	check(scene.get_node_or_null("UI/ControlHint") == null, "Debug and keyboard-hint labels are absent")
 	var center: Vector2 = controls.joystick_center
 	var echo_center: Vector2 = controls.sonar_center
+	var full_throw: float = 56.0 * controls.touch_scale
 	touch(0, center + Vector2(2, 2), true)
 	check(player.mobile_movement == Vector2.ZERO, "Joystick dead zone prevents accidental drift")
-	drag(0, center + Vector2(56, 0))
+	drag(0, center + Vector2(full_throw, 0))
 	check(player.mobile_movement.x > 0.99, "A touch drag steers the player")
 	var start_position: Vector2 = player.position
 	for frame in range(15):
@@ -74,13 +75,13 @@ func run() -> void:
 	for frame in range(2):
 		await physics_frame
 	check(player.mobile_movement == Vector2.ZERO and player.velocity == Vector2.ZERO, "Canceling a touch stops the player")
-	touch(7, center + Vector2(-56, 0), true)
+	touch(7, center + Vector2(-full_throw, 0), true)
 	controls.notification(controls.NOTIFICATION_APPLICATION_FOCUS_OUT)
 	check(player.mobile_movement == Vector2.ZERO and controls.joystick_pointer == -1, "Losing focus releases held controls")
 	touch(7, center, false)
 	var mouse := InputEventMouseButton.new()
 	mouse.button_index = MOUSE_BUTTON_LEFT
-	mouse.position = center + Vector2(56, 0)
+	mouse.position = center + Vector2(full_throw, 0)
 	mouse.pressed = true
 	Input.parse_input_event(mouse)
 	Input.flush_buffered_events()
@@ -90,7 +91,7 @@ func run() -> void:
 	Input.parse_input_event(mouse)
 	Input.flush_buffered_events()
 	check(player.mobile_movement == Vector2.ZERO, "Mouse release resets the joystick")
-	touch(0, center + Vector2(56, 0), true)
+	touch(0, center + Vector2(full_throw, 0), true)
 	touch(8, controls.pause_center, true)
 	for frame in range(2):
 		await process_frame
@@ -123,7 +124,7 @@ func run() -> void:
 	key.pressed = false
 	Input.parse_input_event(key)
 	Input.flush_buffered_events()
-	touch(0, center + Vector2(56, 0), true)
+	touch(0, center + Vector2(full_throw, 0), true)
 	player.die()
 	for frame in range(4):
 		await process_frame
@@ -163,7 +164,7 @@ func run() -> void:
 			await process_frame
 		var screen := Rect2(Vector2.ZERO, controls.size)
 		check(screen.has_point(controls.joystick_center) and screen.has_point(controls.sonar_center) and screen.has_point(controls.pause_center), "Touch controls stay on screen after resizing to " + str(window_size))
-		touch(30, controls.joystick_center + Vector2(56 * controls.ui_scale, 0), true)
+		touch(30, controls.joystick_center + Vector2(56 * controls.touch_scale, 0), true)
 		check(controls.movement.x > 0.99, "Physical touch coordinates still hit the joystick at " + str(window_size))
 		touch(30, controls.joystick_center, false)
 		var count_before := waves(current_scene)
