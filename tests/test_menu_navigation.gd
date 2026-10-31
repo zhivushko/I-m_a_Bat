@@ -64,8 +64,11 @@ func run() -> void:
 	navigation.open_main_menu()
 	await settle()
 	check(uses_shared_theme(current_scene.play_button), "Main menu adopts the dark outlined theme")
+	check(current_scene.get_node("Background") is TextureRect and current_scene.get_node("Background").texture.resource_path == "res://preview.jpg", "Main menu preserves the original illustrated background")
+	check(current_scene.title.text == "ECHOLOCATION IN DARKNESS", "Main menu restores its original large title")
 	await tap(current_scene.settings_button)
 	check(current_scene.scene_file_path.ends_with("SettingsMenu.tscn"), "Main menu opens Settings by touch")
+	check(current_scene.get_node("BackgroundArt").visible, "Standalone Settings retain the original background art")
 	current_scene.volume_slider.value = 0.0
 	check(AudioServer.is_bus_mute(0) and current_scene.volume_value.text == "0%", "Volume zero reliably mutes the game")
 	current_scene.volume_slider.value = 0.37
@@ -108,6 +111,7 @@ func run() -> void:
 	await tap(controls.settings_button)
 	check(is_instance_valid(navigation.settings_overlay) and paused and not controls.pause_panel.visible, "Pause opens Settings over the frozen game")
 	var settings = navigation.settings_overlay.get_child(0)
+	check(not settings.get_node("BackgroundArt").visible, "Pause Settings preserve the frozen game behind the overlay")
 	settings.volume_slider.value = 0.62
 	await tap(settings.back_button)
 	check(current_scene.get_instance_id() == scene_id and current_scene.get_node("Player").position == position_before and current_scene.level_time == time_before, "Returning from Settings preserves the level, position, and timer")
@@ -147,7 +151,7 @@ func run() -> void:
 		for dimensions in [Vector2i(960, 540), Vector2i(2340, 1080), Vector2i(720, 960)]:
 			root.size = dimensions
 			await settle()
-			var panel: Control = current_scene.get_node("Center/Panel")
+			var panel: Control = current_scene.get_node("MarginContainer/VBoxContainer") if path == navigation.MAIN_MENU else current_scene.get_node("Center/Panel")
 			var bounds := panel.get_global_rect()
 			check(Rect2(Vector2.ZERO, root.get_visible_rect().size).encloses(bounds), "Menu panel fits " + path.get_file() + " at " + str(dimensions))
 	navigation.open_main_menu()

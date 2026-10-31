@@ -21,8 +21,14 @@ func _ready() -> void:
 	fullscreen_toggle.toggled.connect(_on_fullscreen_toggled)
 	if is_pause_overlay:
 		$Background.color = Color(0, 0, 0, 0.86)
+		$BackgroundArt.hide()
 		back_button.text = "Назад к паузе"
+	resized.connect(_update_background)
+	_update_background()
 	back_button.grab_focus()
+
+func _update_background() -> void:
+	$BackgroundArt.offset_left = -size.y
 
 func _on_volume_changed(value: float) -> void:
 	AudioServer.set_bus_mute(master_bus_index, value <= 0.001)
