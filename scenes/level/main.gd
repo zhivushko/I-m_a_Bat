@@ -3,6 +3,8 @@ extends Node2D
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var player: CharacterBody2D = $Player
 @onready var walls_container: Node2D = $Walls
+@onready var ambient: AudioStreamPlayer = $AmbientHum
+@onready var audio_points: Node2D = $AudioPoints
 
 var wall_scene: PackedScene = preload("res://scenes/world/Wall.tscn")
 
@@ -13,6 +15,11 @@ func _ready() -> void:
 
 	if walls_container and walls_container.get_child_count() == 0:
 		build_test_maze()
+	
+	if ambient:
+		ambient.volume_db = -20.0
+		if not ambient.playing:
+			ambient.play()
 
 func _process(_delta: float) -> void:
 	update_sonar_shader_on_walls()

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b0tyidhcanscw"]
+
+[ext_resource type="Script" uid="uid://didblorswufao" path="res://scenes/fx/sound_point.gd" id="1_dq2s8"]
+
+[node name="SoundPoint" type="AudioStreamPlayer2D" unique_id=275366464]
+script = ExtResource("1_dq2s8")

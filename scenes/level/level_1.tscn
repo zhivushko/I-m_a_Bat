@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://c_level_1_01"]
+[gd_scene format=3 uid="uid://dsv8syu6gl2qx"]
 
-[ext_resource type="Script" path="res://scenes/level/main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://c6e01fk8y2b4s" path="res://scenes/level/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://13n2vsfqwo72" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/world/LevelExit.tscn" id="3_exit"]
+[ext_resource type="AudioStream" uid="uid://crm2n880xhy36" path="res://assets/sounds/Gul.ogg" id="4_xbhhu"]
+[ext_resource type="PackedScene" uid="uid://b0tyidhcanscw" path="res://scenes/fx/SoundPoint.tscn" id="5_u8rbc"]
 
-[node name="Level1" type="Node2D"]
+[node name="Level1" type="Node2D" unique_id=593568508]
 script = ExtResource("1_main")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=373469797]
 z_index = -100
 offset_left = -10000.0
 offset_top = -10000.0
@@ -15,23 +17,41 @@ offset_right = 10000.0
 offset_bottom = 10000.0
 color = Color(0, 0, 0, 1)
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=32129844]
 color = Color(0, 0, 0, 1)
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=1605173103]
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=2109067208 instance=ExtResource("2_player")]
 position = Vector2(160, 360)
 
-[node name="LevelExit" parent="." instance=ExtResource("3_exit")]
+[node name="LevelExit" parent="." unique_id=189925954 instance=ExtResource("3_exit")]
 position = Vector2(1150, 360)
-current_level_index = 1
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=628202484]
 
-[node name="ControlHint" type="Label" parent="UI"]
+[node name="ControlHint" type="Label" parent="UI" unique_id=1066913895]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 500.0
 offset_bottom = 70.0
 text = "Уровень 1 | Дойдите до белого квадрата!"
+
+[node name="AmbientHum" type="AudioStreamPlayer" parent="." unique_id=1406432310]
+stream = ExtResource("4_xbhhu")
+volume_db = -30.5
+autoplay = true
+parameters/looping = true
+
+[node name="AudioPoints" type="Node2D" parent="." unique_id=1095239540]
+
+[node name="SoundPoint" parent="AudioPoints" unique_id=275366464 instance=ExtResource("5_u8rbc")]
+position = Vector2(256, 335)
+
+[node name="SoundPoint2" parent="AudioPoints" unique_id=1556279118 instance=ExtResource("5_u8rbc")]
+position = Vector2(524, 265)
+sound_type = "rock"
+
+[node name="SoundPoint3" parent="AudioPoints" unique_id=666568096 instance=ExtResource("5_u8rbc")]
+position = Vector2(916, 540)
+sound_type = "rock"
