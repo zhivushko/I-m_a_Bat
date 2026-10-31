@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://didblorswufao" path="res://scenes/fx/sound_point.gd" id="1_dq2s8"]
 
 [node name="SoundPoint" type="AudioStreamPlayer2D" unique_id=275366464]
+max_distance = 400.0
 script = ExtResource("1_dq2s8")

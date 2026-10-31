@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://13n2vsfqwo72" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/world/LevelExit.tscn" id="3_exit"]
 [ext_resource type="AudioStream" uid="uid://crm2n880xhy36" path="res://assets/sounds/Gul.ogg" id="4_c0fdf"]
-[ext_resource type="PackedScene" path="res://scenes/world/Wall.tscn" id="5_wall"]
+[ext_resource type="PackedScene" uid="uid://cs0pwd20afck7" path="res://scenes/world/Wall.tscn" id="5_wall"]
 [ext_resource type="PackedScene" path="res://scenes/world/Spike.tscn" id="6_spike"]
-[ext_resource type="PackedScene" path="res://scenes/fx/SoundPoint.tscn" id="7_sound"]
+[ext_resource type="PackedScene" uid="uid://b0tyidhcanscw" path="res://scenes/fx/SoundPoint.tscn" id="7_sound"]
 
 [node name="Level2" type="Node2D" unique_id=695234495]
 script = ExtResource("1_main")
@@ -24,168 +24,168 @@ color = Color(0, 0, 0, 1)
 
 [node name="Walls" type="Node2D" parent="." unique_id=1332259912]
 
-[node name="TopBoundary" parent="Walls" instance=ExtResource("5_wall")]
+[node name="TopBoundary" parent="Walls" unique_id=1507646279 instance=ExtResource("5_wall")]
 position = Vector2(640, 30)
 polygon_points = PackedVector2Array(-640, -30, 640, -30, 640, 30, -640, 30)
 
-[node name="BottomBoundary" parent="Walls" instance=ExtResource("5_wall")]
+[node name="BottomBoundary" parent="Walls" unique_id=2025885288 instance=ExtResource("5_wall")]
 position = Vector2(640, 770)
 polygon_points = PackedVector2Array(-640, -30, 640, -30, 640, 30, -640, 30)
 
-[node name="LeftBoundary" parent="Walls" instance=ExtResource("5_wall")]
+[node name="LeftBoundary" parent="Walls" unique_id=546448645 instance=ExtResource("5_wall")]
 position = Vector2(30, 400)
 polygon_points = PackedVector2Array(-30, -400, 30, -400, 30, 400, -30, 400)
 
-[node name="RightBoundary" parent="Walls" instance=ExtResource("5_wall")]
+[node name="RightBoundary" parent="Walls" unique_id=376290687 instance=ExtResource("5_wall")]
 position = Vector2(1250, 400)
 polygon_points = PackedVector2Array(-30, -400, 30, -400, 30, 400, -30, 400)
 
-[node name="UpperPartition" parent="Walls" instance=ExtResource("5_wall")]
+[node name="UpperPartition" parent="Walls" unique_id=2052897182 instance=ExtResource("5_wall")]
 position = Vector2(545, 265)
 polygon_points = PackedVector2Array(-35, -205, 35, -205, 35, 205, -35, 205)
 
-[node name="LowerPartition" parent="Walls" instance=ExtResource("5_wall")]
+[node name="LowerPartition" parent="Walls" unique_id=824762310 instance=ExtResource("5_wall")]
 position = Vector2(905, 540)
 polygon_points = PackedVector2Array(-35, -200, 35, -200, 35, 200, -35, 200)
 
-[node name="FirstPassageCeilingSpike" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstPassageCeilingSpike" parent="Walls" unique_id=129757572 instance=ExtResource("6_spike")]
 position = Vector2(545, 470)
 rotation = 3.1415927
 scale = Vector2(1.1, 1)
 
-[node name="FirstCeilingSmallLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstCeilingSmallLeft" parent="Walls" unique_id=1327487804 instance=ExtResource("6_spike")]
 position = Vector2(521, 470)
 rotation = 3.1415927
 scale = Vector2(-0.65, 0.28)
 
-[node name="FirstCeilingSmallRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstCeilingSmallRight" parent="Walls" unique_id=1511198921 instance=ExtResource("6_spike")]
 position = Vector2(570, 470)
 rotation = 3.1415927
 scale = Vector2(0.55, 0.18)
 
-[node name="FirstPassageFloorSpike1" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstPassageFloorSpike1" parent="Walls" unique_id=455273755 instance=ExtResource("6_spike")]
 position = Vector2(497, 740)
 scale = Vector2(-0.75, 0.29)
 
-[node name="FirstPassageFloorSpike2" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstPassageFloorSpike2" parent="Walls" unique_id=900035350 instance=ExtResource("6_spike")]
 position = Vector2(545, 740)
 
-[node name="FirstPassageFloorSpike3" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstPassageFloorSpike3" parent="Walls" unique_id=1532218948 instance=ExtResource("6_spike")]
 position = Vector2(593, 740)
 scale = Vector2(0.8, 0.38)
 
-[node name="FirstFloorBudLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstFloorBudLeft" parent="Walls" unique_id=1526238196 instance=ExtResource("6_spike")]
 position = Vector2(479, 740)
 scale = Vector2(0.55, 0.15)
 
-[node name="FirstFloorBudInnerLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstFloorBudInnerLeft" parent="Walls" unique_id=1585436846 instance=ExtResource("6_spike")]
 position = Vector2(519, 740)
 scale = Vector2(0.6, 0.2)
 
-[node name="FirstFloorBudInnerRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstFloorBudInnerRight" parent="Walls" unique_id=1678753579 instance=ExtResource("6_spike")]
 position = Vector2(568, 740)
 scale = Vector2(-0.65, 0.24)
 
-[node name="FirstFloorBudRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="FirstFloorBudRight" parent="Walls" unique_id=197489892 instance=ExtResource("6_spike")]
 position = Vector2(614, 740)
 scale = Vector2(-0.55, 0.16)
 
-[node name="ApproachSpike1" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachSpike1" parent="Walls" unique_id=1616314092 instance=ExtResource("6_spike")]
 position = Vector2(510, 350)
 rotation = -1.5707963
 scale = Vector2(1, 0.82)
 
-[node name="ApproachSpike2" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachSpike2" parent="Walls" unique_id=1011365923 instance=ExtResource("6_spike")]
 position = Vector2(510, 398)
 rotation = -1.5707963
 scale = Vector2(-0.7, 0.28)
 
-[node name="ApproachBudTop" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachBudTop" parent="Walls" unique_id=25322323 instance=ExtResource("6_spike")]
 position = Vector2(510, 327)
 rotation = -1.5707963
 scale = Vector2(-0.55, 0.16)
 
-[node name="ApproachBudMiddle" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachBudMiddle" parent="Walls" unique_id=715190590 instance=ExtResource("6_spike")]
 position = Vector2(510, 372)
 rotation = -1.5707963
 scale = Vector2(-0.75, 0.38)
 
-[node name="ApproachBudLower" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachBudLower" parent="Walls" unique_id=144954471 instance=ExtResource("6_spike")]
 position = Vector2(510, 386)
 rotation = -1.5707963
 scale = Vector2(0.5, 0.13)
 
-[node name="ApproachBudBottom" parent="Walls" instance=ExtResource("6_spike")]
+[node name="ApproachBudBottom" parent="Walls" unique_id=553604109 instance=ExtResource("6_spike")]
 position = Vector2(510, 420)
 rotation = -1.5707963
 scale = Vector2(0.6, 0.19)
 
-[node name="SecondPassageFloorSpike" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondPassageFloorSpike" parent="Walls" unique_id=1960060483 instance=ExtResource("6_spike")]
 position = Vector2(905, 340)
 scale = Vector2(-0.85, 0.48)
 
-[node name="SecondFloorSmallLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondFloorSmallLeft" parent="Walls" unique_id=5101502 instance=ExtResource("6_spike")]
 position = Vector2(881, 340)
 scale = Vector2(0.65, 0.26)
 
-[node name="SecondFloorSmallRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondFloorSmallRight" parent="Walls" unique_id=633178021 instance=ExtResource("6_spike")]
 position = Vector2(931, 340)
 scale = Vector2(-0.55, 0.15)
 
-[node name="SecondPassageCeilingSpike1" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondPassageCeilingSpike1" parent="Walls" unique_id=623576733 instance=ExtResource("6_spike")]
 position = Vector2(857, 60)
 rotation = 3.1415927
 scale = Vector2(-0.75, 0.3)
 
-[node name="SecondPassageCeilingSpike2" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondPassageCeilingSpike2" parent="Walls" unique_id=1938624011 instance=ExtResource("6_spike")]
 position = Vector2(905, 60)
 rotation = 3.1415927
 
-[node name="SecondPassageCeilingSpike3" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondPassageCeilingSpike3" parent="Walls" unique_id=1217295563 instance=ExtResource("6_spike")]
 position = Vector2(953, 60)
 rotation = 3.1415927
 scale = Vector2(-0.65, 0.24)
 
-[node name="SecondCeilingBudLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondCeilingBudLeft" parent="Walls" unique_id=315891916 instance=ExtResource("6_spike")]
 position = Vector2(837, 60)
 rotation = 3.1415927
 scale = Vector2(0.55, 0.16)
 
-[node name="SecondCeilingBudInnerLeft" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondCeilingBudInnerLeft" parent="Walls" unique_id=1415043681 instance=ExtResource("6_spike")]
 position = Vector2(879, 60)
 rotation = 3.1415927
 scale = Vector2(0.6, 0.19)
 
-[node name="SecondCeilingBudInnerRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondCeilingBudInnerRight" parent="Walls" unique_id=160492350 instance=ExtResource("6_spike")]
 position = Vector2(931, 60)
 rotation = 3.1415927
 scale = Vector2(-0.8, 0.39)
 
-[node name="SecondCeilingBudRight" parent="Walls" instance=ExtResource("6_spike")]
+[node name="SecondCeilingBudRight" parent="Walls" unique_id=357933634 instance=ExtResource("6_spike")]
 position = Vector2(974, 60)
 rotation = 3.1415927
 scale = Vector2(0.5, 0.14)
 
-[node name="DescentSpike1" parent="Walls" instance=ExtResource("6_spike")]
+[node name="DescentSpike1" parent="Walls" unique_id=1275815177 instance=ExtResource("6_spike")]
 position = Vector2(940, 422)
 rotation = 1.5707963
 
-[node name="DescentSpike2" parent="Walls" instance=ExtResource("6_spike")]
+[node name="DescentSpike2" parent="Walls" unique_id=485262815 instance=ExtResource("6_spike")]
 position = Vector2(940, 470)
 rotation = 1.5707963
 scale = Vector2(-0.7, 0.28)
 
-[node name="DescentBudTop" parent="Walls" instance=ExtResource("6_spike")]
+[node name="DescentBudTop" parent="Walls" unique_id=375877374 instance=ExtResource("6_spike")]
 position = Vector2(940, 400)
 rotation = 1.5707963
 scale = Vector2(-0.55, 0.16)
 
-[node name="DescentBudMiddle" parent="Walls" instance=ExtResource("6_spike")]
+[node name="DescentBudMiddle" parent="Walls" unique_id=1830534360 instance=ExtResource("6_spike")]
 position = Vector2(940, 447)
 rotation = 1.5707963
 scale = Vector2(-0.75, 0.4)
 
-[node name="DescentBudBottom" parent="Walls" instance=ExtResource("6_spike")]
+[node name="DescentBudBottom" parent="Walls" unique_id=2143302740 instance=ExtResource("6_spike")]
 position = Vector2(940, 491)
 rotation = 1.5707963
 scale = Vector2(0.6, 0.2)
@@ -207,9 +207,16 @@ parameters/looping = true
 
 [node name="AudioPoints" type="Node2D" parent="." unique_id=847879369]
 
-[node name="FirstPassageDrips" parent="AudioPoints" instance=ExtResource("7_sound")]
+[node name="FirstPassageDrips" parent="AudioPoints" unique_id=11449509 instance=ExtResource("7_sound")]
 position = Vector2(650, 650)
 
-[node name="SecondPassageRocks" parent="AudioPoints" instance=ExtResource("7_sound")]
+[node name="SecondPassageRocks" parent="AudioPoints" unique_id=827389876 instance=ExtResource("7_sound")]
 position = Vector2(1020, 160)
 sound_type = "rock"
+
+[node name="SecondPassageRocks2" parent="AudioPoints" unique_id=275366464 instance=ExtResource("7_sound")]
+position = Vector2(501, 224)
+sound_type = "rock"
+
+[node name="FirstPassageDrips2" parent="AudioPoints" unique_id=1149497431 instance=ExtResource("7_sound")]
+position = Vector2(979, 366)

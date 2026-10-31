@@ -11,10 +11,10 @@ script = ExtResource("1_main")
 
 [node name="Background" type="ColorRect" parent="." unique_id=373469797]
 z_index = -100
-offset_left = -10000.0
-offset_top = -10000.0
-offset_right = 10000.0
-offset_bottom = 10000.0
+offset_left = -11310.0
+offset_top = -10174.0
+offset_right = 8690.0
+offset_bottom = 9826.0
 color = Color(0, 0, 0, 1)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=32129844]
@@ -39,12 +39,19 @@ parameters/looping = true
 [node name="AudioPoints" type="Node2D" parent="." unique_id=1095239540]
 
 [node name="SoundPoint" parent="AudioPoints" unique_id=275366464 instance=ExtResource("5_u8rbc")]
-position = Vector2(256, 335)
+position = Vector2(139, 133)
 
 [node name="SoundPoint2" parent="AudioPoints" unique_id=1556279118 instance=ExtResource("5_u8rbc")]
-position = Vector2(524, 265)
+position = Vector2(540, 263)
 sound_type = "rock"
 
 [node name="SoundPoint3" parent="AudioPoints" unique_id=666568096 instance=ExtResource("5_u8rbc")]
 position = Vector2(916, 540)
 sound_type = "rock"
+
+[node name="SoundPoint4" parent="AudioPoints" unique_id=651695898 instance=ExtResource("5_u8rbc")]
+position = Vector2(370, 583)
+
+[node name="SoundPoint5" parent="AudioPoints" unique_id=847654625 instance=ExtResource("5_u8rbc")]
+position = Vector2(992, 107)
+max_interval = 10.0

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b0cowvo6hjq3g"
+path="res://.godot/imported/Крик_урон_3.wav-828cbf16ee963b19cb2e56ce3d348811.sample"
+
+[deps]
+
+source_file="res://sound/untitled folder/Крик_урон_3.wav"
+dest_files=["res://.godot/imported/Крик_урон_3.wav-828cbf16ee963b19cb2e56ce3d348811.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
