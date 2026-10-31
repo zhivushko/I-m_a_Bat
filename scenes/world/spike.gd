@@ -20,7 +20,7 @@ func setup_wall() -> void:
 	if light_occluder:
 		light_occluder.visible = false
 	if line_2d:
-		line_2d.width = 1.8
+		line_2d.width = 1.4
 		line_2d.joint_mode = Line2D.LINE_JOINT_SHARP
 	if damage_polygon and polygon_points.size() >= 3:
 		# Detect contact just before the solid surface stops the player.

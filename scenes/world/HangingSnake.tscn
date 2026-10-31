@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/world/hanging_snake.gd" id="1_snake"]
+
+[node name="HangingSnake" type="AnimatableBody2D" groups=["hanging_snakes"]]
+collision_layer = 1
+collision_mask = 1
+sync_to_physics = false
+script = ExtResource("1_snake")
+
+[node name="BodyFill" type="Polygon2D" parent="."]
+color = Color(0, 0, 0, 1)
+
+[node name="Outline" type="Line2D" parent="."]
+width = 1.4
+default_color = Color(1, 1, 1, 1)
+joint_mode = 2
+antialiased = true
+
+[node name="LeftEye" type="Line2D" parent="."]
+width = 1.7
+default_color = Color(1, 1, 1, 1)
+antialiased = true
+
+[node name="RightEye" type="Line2D" parent="."]
+width = 1.7
+default_color = Color(1, 1, 1, 1)
+antialiased = true
+
+[node name="Tongue" type="Line2D" parent="."]
+width = 1.0
+default_color = Color(1, 1, 1, 1)
+antialiased = true
+
+[node name="TongueFork" type="Line2D" parent="."]
+width = 1.0
+default_color = Color(1, 1, 1, 1)
+antialiased = true
+
+[node name="DamageArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
