@@ -1,5 +1,7 @@
 extends Node2D
 
+var level_time: float = 0.0
+
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var player: CharacterBody2D = $Player
 @onready var walls_container: Node2D = $Walls
@@ -9,6 +11,7 @@ extends Node2D
 var wall_scene: PackedScene = preload("res://scenes/world/Wall.tscn")
 
 func _ready() -> void:
+	level_time = 0.0
 	RenderingServer.set_default_clear_color(Color.BLACK)
 	if canvas_modulate:
 		canvas_modulate.color = Color(0, 0, 0, 1)
@@ -21,7 +24,9 @@ func _ready() -> void:
 		if not ambient.playing:
 			ambient.play()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if not get_tree().paused:
+		level_time += delta
 	update_sonar_shader_on_walls()
 
 func update_sonar_shader_on_walls() -> void:
