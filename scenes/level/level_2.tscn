@@ -41,25 +41,25 @@ position = Vector2(1250, 400)
 polygon_points = PackedVector2Array(-30, -400, 30, -400, 30, 400, -30, 400)
 
 [node name="UpperPartition" parent="Walls" instance=ExtResource("5_wall")]
-position = Vector2(545, 245)
-polygon_points = PackedVector2Array(-35, -185, 35, -185, 35, 185, -35, 185)
+position = Vector2(545, 265)
+polygon_points = PackedVector2Array(-35, -205, 35, -205, 35, 205, -35, 205)
 
 [node name="LowerPartition" parent="Walls" instance=ExtResource("5_wall")]
-position = Vector2(905, 550)
-polygon_points = PackedVector2Array(-35, -190, 35, -190, 35, 190, -35, 190)
+position = Vector2(905, 540)
+polygon_points = PackedVector2Array(-35, -200, 35, -200, 35, 200, -35, 200)
 
 [node name="FirstPassageCeilingSpike" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(545, 430)
+position = Vector2(545, 470)
 rotation = 3.1415927
 scale = Vector2(1.1, 1)
 
 [node name="FirstCeilingSmallLeft" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(521, 430)
+position = Vector2(521, 470)
 rotation = 3.1415927
 scale = Vector2(-0.65, 0.28)
 
 [node name="FirstCeilingSmallRight" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(570, 430)
+position = Vector2(570, 470)
 rotation = 3.1415927
 scale = Vector2(0.55, 0.18)
 
@@ -121,15 +121,15 @@ rotation = -1.5707963
 scale = Vector2(0.6, 0.19)
 
 [node name="SecondPassageFloorSpike" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(905, 360)
+position = Vector2(905, 340)
 scale = Vector2(-0.85, 0.48)
 
 [node name="SecondFloorSmallLeft" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(881, 360)
+position = Vector2(881, 340)
 scale = Vector2(0.65, 0.26)
 
 [node name="SecondFloorSmallRight" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(931, 360)
+position = Vector2(931, 340)
 scale = Vector2(-0.55, 0.15)
 
 [node name="SecondPassageCeilingSpike1" parent="Walls" instance=ExtResource("6_spike")]
