@@ -1,96 +1,107 @@
-[gd_scene format=3 uid="uid://brf4402yt07rm"]
+[gd_scene load_steps=4 format=3 uid="uid://brf4402yt07rm"]
 
-[ext_resource type="Script" uid="uid://d2850u868h6er" path="res://scenes/ui/settings_menu.gd" id="1_settings"]
-[ext_resource type="Texture2D" uid="uid://cf06sdy4fri48" path="res://preview.jpg" id="2_pguvw"]
+[ext_resource type="Script" path="res://scenes/ui/settings_menu.gd" id="1_script"]
+[ext_resource type="Theme" path="res://scenes/ui/menu_theme.tres" id="2_theme"]
 
-[node name="SettingsMenu" type="Control" unique_id=980286093]
+[ext_resource type="Texture2D" path="res://preview.jpg" id="3_background"]
+
+[node name="SettingsMenu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_settings")
+mouse_filter = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
 
-[node name="ColorBg" type="TextureRect" parent="." unique_id=475436689]
-self_modulate = Color(1, 1, 1, 0.26666668)
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("2_pguvw")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1363664639]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 40
+color = Color(0, 0, 0, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=821834334]
-layout_mode = 2
-theme_override_constants/separation = 40
+[node name="BackgroundArt" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.26666668)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -720.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_background")
+expand_mode = 3
+stretch_mode = 5
 
-[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=605856136]
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/Header" unique_id=861234203]
-custom_minimum_size = Vector2(100, 40)
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
 layout_mode = 2
-text = "← Назад"
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=237646145]
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Настройки"
 horizontal_alignment = 1
 
-[node name="DummySpacer" type="Control" parent="MarginContainer/VBoxContainer/Header" unique_id=1343967354]
-custom_minimum_size = Vector2(100, 0)
+[node name="VolumeHeader" type="HBoxContainer" parent="Center/Panel/Margin/Content"]
 layout_mode = 2
 
-[node name="SettingsList" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=252714238]
-custom_minimum_size = Vector2(400, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 24
-
-[node name="VolumeContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/SettingsList" unique_id=367225555]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/SettingsList/VolumeContainer" unique_id=1042235330]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Громкость:"
-
-[node name="VolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/SettingsList/VolumeContainer" unique_id=1966221506]
+[node name="VolumeLabel" type="Label" parent="Center/Panel/Margin/Content/VolumeHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+text = "Громкость"
+
+[node name="VolumeValue" type="Label" parent="Center/Panel/Margin/Content/VolumeHeader"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+text = "100%"
+horizontal_alignment = 2
+
+[node name="VolumeSlider" type="HSlider" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
 max_value = 1.0
-step = 0.05
-value = 0.8
+step = 0.01
+value = 1.0
 
-[node name="FullscreenContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/SettingsList" unique_id=549965831]
+[node name="FullscreenToggle" type="Button" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Полный экран: вкл."
+toggle_mode = true
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/SettingsList/FullscreenContainer" unique_id=1144011774]
-custom_minimum_size = Vector2(160, 0)
+[node name="BackButton" type="Button" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Полный экран:"
-
-[node name="FullscreenToggle" type="CheckButton" parent="MarginContainer/VBoxContainer/SettingsList/FullscreenContainer" unique_id=2126239004]
-layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
+text = "Назад"

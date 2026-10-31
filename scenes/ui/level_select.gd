@@ -1,39 +1,34 @@
 extends Control
 
-@onready var level_grid: GridContainer = $MarginContainer/VBoxContainer/GridContainer
-@onready var back_button: Button = $MarginContainer/VBoxContainer/Header/BackButton
+const LEVEL_NAMES := {1: "Пещера", 2: "Каменные иглы", 3: "Змеиные своды"}
+
+@onready var level_list: VBoxContainer = $Center/Panel/Margin/Content/LevelList
+@onready var back_button: Button = $Center/Panel/Margin/Content/Footer/BackButton
+@onready var settings_button: Button = $Center/Panel/Margin/Content/Footer/SettingsButton
 
 func _ready() -> void:
-	if back_button:
-		back_button.pressed.connect(_on_back_button_pressed)
+	back_button.pressed.connect(navigate_back)
+	settings_button.pressed.connect(func(): MenuNavigation.open_settings(MenuNavigation.LEVEL_SELECT))
 	setup_level_buttons()
 
 func setup_level_buttons() -> void:
-	var unlocked = GameManager.unlocked_levels
-	var total_levels = GameManager.max_levels
-
-	for child in level_grid.get_children():
+	for child in level_list.get_children():
 		child.queue_free()
-
-	for lvl in range(1, total_levels + 1):
-		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(120, 120)
-		btn.add_theme_font_size_override("font_size", 28)
-
-		if lvl <= unlocked:
-			btn.text = "Уровень " + str(lvl)
-			btn.disabled = false
-			btn.modulate = Color.WHITE
-			btn.pressed.connect(func(): _on_level_button_pressed(lvl))
+	for index in range(1, GameManager.max_levels + 1):
+		var button := Button.new()
+		button.name = "Level%d" % index
+		button.custom_minimum_size = Vector2(0, 72)
+		button.text = "%02d · %s" % [index, LEVEL_NAMES.get(index, "Уровень")]
+		button.disabled = index > GameManager.unlocked_levels
+		if button.disabled:
+			button.text += " — закрыт"
 		else:
-			btn.text = "🔒 " + str(lvl)
-			btn.disabled = true
-			btn.modulate = Color(1.0, 1.0, 1.0, 0.4)
-
-		level_grid.add_child(btn)
+			button.pressed.connect(_on_level_button_pressed.bind(index))
+		level_list.add_child(button)
+	level_list.get_child(0).grab_focus()
 
 func _on_level_button_pressed(level_index: int) -> void:
 	GameManager.load_level(level_index)
 
-func _on_back_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
+func navigate_back() -> void:
+	MenuNavigation.open_main_menu()
