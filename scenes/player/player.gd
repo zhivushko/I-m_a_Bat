@@ -24,6 +24,7 @@ var is_dead: bool = false
 func _ready() -> void:
 	setup_player_visuals()
 	setup_audio_streams()
+	add_to_group("player")
 
 func setup_audio_streams() -> void:
 	if screech_audio and screech_sound:
