@@ -95,7 +95,27 @@ func run() -> void:
 	check(snake.position == anchor and snake.spine[0].length() < 0.01, "The hanging tail remains attached to the ceiling")
 	check(snake.body_fill.color == Color.BLACK and snake.outline.default_color == Color.WHITE, "Snake visuals use white outlines without a bright fill")
 	check(not Geometry2D.triangulate_polygon(snake.body_fill.polygon).is_empty(), "The animated snake outline remains a valid polygon")
-	for target in [Vector2(250, 840), Vector2(1020, 840), Vector2(1020, 550), Vector2(580, 550), Vector2(580, 240), Vector2(1390, 240), Vector2(1390, 210), Vector2(1580, 210), Vector2(1780, 275), Vector2(3300, 275), Vector2(3300, 620), Vector2(1900, 620), Vector2(1900, 935), Vector2(3300, 935), Vector2(3320, 900)]:
+	var player_shape := CircleShape2D.new()
+	player_shape.radius = 14.0
+	for blocked_point in [Vector2(2220, 275), Vector2(2464, 620), Vector2(2841, 935)]:
+		var query := PhysicsShapeQueryParameters2D.new()
+		query.shape = player_shape
+		query.transform = Transform2D(0.0, blocked_point)
+		query.collision_mask = 1
+		query.exclude = [player.get_rid()]
+		check(not scene.get_world_2d().direct_space_state.intersect_shape(query).is_empty(), "Floor spikes prevent straight flight through " + str(blocked_point))
+	var route: Array[Vector2] = [
+		Vector2(250, 840), Vector2(1020, 840), Vector2(1020, 550), Vector2(580, 550),
+		Vector2(580, 240), Vector2(1390, 240), Vector2(1390, 210), Vector2(1580, 210),
+		Vector2(1780, 275), Vector2(2110, 275), Vector2(2180, 235), Vector2(2290, 235),
+		Vector2(2380, 275), Vector2(2630, 275), Vector2(2700, 235), Vector2(2790, 235),
+		Vector2(2830, 275), Vector2(3300, 275), Vector2(3300, 620), Vector2(3040, 620),
+		Vector2(3000, 590), Vector2(2900, 590), Vector2(2820, 620), Vector2(2570, 620),
+		Vector2(2510, 590), Vector2(2400, 590), Vector2(2310, 620), Vector2(1900, 620),
+		Vector2(1900, 935), Vector2(2730, 935), Vector2(2780, 910), Vector2(2900, 910),
+		Vector2(2960, 935), Vector2(3300, 935), Vector2(3320, 900)
+	]
+	for target in route:
 		var reached := await travel(player, target)
 		check(reached, "Safe route reaches " + str(target))
 		if not reached:
