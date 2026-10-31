@@ -14,6 +14,7 @@ tile_set = ExtResource("3_dmj8a")
 script = ExtResource("4_7qbi5")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1239715303]
+visible = false
 z_index = -100
 offset_left = -10000.0
 offset_top = -10000.0
@@ -22,6 +23,7 @@ offset_bottom = 10000.0
 color = Color(0, 0, 0, 1)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=490403079]
+visible = false
 color = Color(0, 0, 0, 1)
 
 [node name="Player" parent="." unique_id=556552893 instance=ExtResource("2_7qbi5")]
