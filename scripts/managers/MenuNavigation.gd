@@ -100,17 +100,17 @@ func back() -> void:
 	var player := scene.get_node_or_null("Player")
 	if player and player.get("is_dead") == true:
 		return
-	var controls := scene.get_node_or_null("UI/MobileControls")
-	if controls and controls.get("owns_pause") == true:
-		controls._resume()
+	var hud := scene.get_node_or_null("UI/GameHUD")
+	if hud and hud.get("owns_pause") == true:
+		hud._resume()
 		return
 	if get_tree().paused:
 		for child in get_tree().root.get_children():
 			if child.has_method("navigate_back"):
 				child.navigate_back()
 				return
-	elif controls:
-		controls._open_pause()
+	elif hud:
+		hud._open_pause()
 
 func _clear_overlays() -> void:
 	if is_instance_valid(settings_overlay):

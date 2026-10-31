@@ -22,8 +22,8 @@ func settle() -> void:
 func tap(button: Button) -> void:
 	var point := root.get_final_transform() * button.get_global_rect().get_center()
 	for pressed in [true, false]:
-		var event := InputEventScreenTouch.new()
-		event.index = 20
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
 		event.position = point
 		event.pressed = pressed
 		Input.parse_input_event(event)
@@ -67,7 +67,7 @@ func run() -> void:
 	check(current_scene.get_node("Background") is TextureRect and current_scene.get_node("Background").texture.resource_path == "res://preview.jpg", "Main menu preserves the original illustrated background")
 	check(current_scene.title.text == "ECHOLOCATION IN DARKNESS", "Main menu restores its original large title")
 	await tap(current_scene.settings_button)
-	check(current_scene.scene_file_path.ends_with("SettingsMenu.tscn"), "Main menu opens Settings by touch")
+	check(current_scene.scene_file_path.ends_with("SettingsMenu.tscn"), "Main menu opens Settings by mouse")
 	check(current_scene.get_node("BackgroundArt").visible, "Standalone Settings retain the original background art")
 	current_scene.volume_slider.value = 0.0
 	check(AudioServer.is_bus_mute(0) and current_scene.volume_value.text == "0%", "Volume zero reliably mutes the game")
@@ -84,7 +84,7 @@ func run() -> void:
 	check(current_scene.level_list.get_node("Level2").disabled, "Locked levels remain inaccessible")
 	check(uses_shared_theme(current_scene.level_list.get_node("Level1")), "Generated level buttons share the menu theme")
 	await tap(current_scene.level_list.get_node("Level2"))
-	check(current_scene.scene_file_path.ends_with("LevelSelect.tscn"), "Touching a locked level does not enter it")
+	check(current_scene.scene_file_path.ends_with("LevelSelect.tscn"), "Clicking a locked level does not enter it")
 	await tap(current_scene.settings_button)
 	navigation.notification(navigation.NOTIFICATION_WM_GO_BACK_REQUEST)
 	await settle()
@@ -102,8 +102,8 @@ func run() -> void:
 	await tap(current_scene.level_list.get_node("Level1"))
 	check(current_scene.scene_file_path.ends_with("level_1.tscn") and not paused, "Selecting an unlocked level starts gameplay")
 	await escape()
-	var controls = current_scene.get_node("UI/MobileControls")
-	check(paused and controls.owns_pause, "Escape opens the same pause menu as the touch button")
+	var controls = current_scene.get_node("UI/GameHUD")
+	check(paused and controls.owns_pause, "Escape opens the desktop pause menu")
 	check(uses_shared_theme(controls.resume_button) and uses_shared_theme(controls.settings_button), "Pause uses the same theme as every full-screen menu")
 	var scene_id: int = current_scene.get_instance_id()
 	var position_before: Vector2 = current_scene.get_node("Player").position
@@ -119,7 +119,7 @@ func run() -> void:
 	await escape()
 	check(not paused, "Back from Pause resumes gameplay")
 	await escape()
-	controls = current_scene.get_node("UI/MobileControls")
+	controls = current_scene.get_node("UI/GameHUD")
 	await tap(controls.main_menu_button)
 	check(current_scene.scene_file_path.ends_with("MainMenu.tscn") and not paused, "Pause can return to Main without leaving the tree paused")
 	navigation.open_level_select()

@@ -1,6 +1,6 @@
 extends Node2D
 
-const MOBILE_CONTROLS: PackedScene = preload("res://scenes/ui/MobileControls.tscn")
+const GAME_HUD: PackedScene = preload("res://scenes/ui/GameHUD.tscn")
 
 var level_time: float = 0.0
 
@@ -14,9 +14,9 @@ var wall_scene: PackedScene = preload("res://scenes/world/Wall.tscn")
 
 func _ready() -> void:
 	level_time = 0.0
-	var controls := MOBILE_CONTROLS.instantiate()
-	$UI.add_child(controls)
-	controls.bind_player(player)
+	var hud := GAME_HUD.instantiate()
+	$UI.add_child(hud)
+	hud.bind_player(player)
 	RenderingServer.set_default_clear_color(Color.BLACK)
 	if canvas_modulate:
 		canvas_modulate.color = Color(0, 0, 0, 1)
