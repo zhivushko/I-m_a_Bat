@@ -2,10 +2,11 @@ shader_type canvas_item;
 
 uniform vec2 wave_centers[8];
 uniform float wave_radii[8];
-uniform float wave_thicknesses[8];
-uniform float wave_intensities[8];
+uniform float max_radii[8];
+uniform float global_alphas[8];
 uniform int active_waves_count = 0;
 
+uniform float edge_softness = 20.0;
 uniform vec4 base_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float reveal_alpha : hint_range(0.0, 1.0) = 0.0;
 
@@ -22,22 +23,19 @@ void fragment() {
 		if (i >= active_waves_count) {
 			break;
 		}
-		float dist = distance(world_position, wave_centers[i]);
-		float r = wave_radii[i];
 
-		// Как только фронт волны доходит до пикселя, он полностью подсвечивается
-		if (dist <= r) {
-			float wave_alpha = wave_intensities[i];
-			if (wave_alpha > max_sonar_alpha) {
-				max_sonar_alpha = wave_alpha;
-			}
-		} else if (dist <= r + 30.0) {
-			// Плавная передняя кромка волны
-			float edge_factor = 1.0 - ((dist - r) / 30.0);
-			float wave_alpha = edge_factor * wave_intensities[i];
-			if (wave_alpha > max_sonar_alpha) {
-				max_sonar_alpha = wave_alpha;
-			}
+		float dist = distance(world_position, wave_centers[i]);
+		float current_r = wave_radii[i];
+		float max_r = max_radii[i];
+		float g_alpha = global_alphas[i];
+
+		float wave_front = smoothstep(current_r + edge_softness, current_r, dist);
+		float boundary = 1.0 - smoothstep(max_r - edge_softness * 2.0, max_r, dist);
+
+		float visibility = wave_front * boundary * g_alpha;
+
+		if (visibility > max_sonar_alpha) {
+			max_sonar_alpha = visibility;
 		}
 	}
 

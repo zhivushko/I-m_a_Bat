@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ywmpqscr1tom"
+path="res://.godot/imported/Крик_6_min_gaint.wav-53b86e29337665c91a782c0de104946c.sample"
+
+[deps]
+
+source_file="res://sound/untitled folder/Крик_6_min_gaint.wav"
+dest_files=["res://.godot/imported/Крик_6_min_gaint.wav-53b86e29337665c91a782c0de104946c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

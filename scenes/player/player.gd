@@ -1,8 +1,12 @@
 extends CharacterBody2D
 
 @export var speed: float = 220.0
-@export var step_interval: float = 0.4
+@export var step_interval: float = 0.45
 @export var sound_wave_scene: PackedScene = preload("res://scenes/fx/SoundWave.tscn")
+
+@export_group("Audio")
+@export var screech_sound: AudioStream
+@export var wing_flap_sound: AudioStream
 
 var step_timer: float = 0.0
 
@@ -11,8 +15,18 @@ var step_timer: float = 0.0
 @onready var camera: Camera2D = $Camera2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+@onready var wing_flap_audio: AudioStreamPlayer2D = $WingFlapAudio
+@onready var screech_audio: AudioStreamPlayer2D = $ScreechAudio
+
 func _ready() -> void:
 	setup_player_visuals()
+	setup_audio_streams()
+
+func setup_audio_streams() -> void:
+	if screech_audio and screech_sound:
+		screech_audio.stream = screech_sound
+	if wing_flap_audio and wing_flap_sound:
+		wing_flap_audio.stream = wing_flap_sound
 
 func setup_player_visuals() -> void:
 	if contour_line:
@@ -77,7 +91,8 @@ func _physics_process(delta: float) -> void:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
-			spawn_sound_wave(3.0, 1.5, 24, 1.2)
+			play_wing_flap_sound()
+			#spawn_sound_wave(3.5, 2.0, 24, 1.2)
 	else:
 		step_timer = step_interval
 
@@ -87,6 +102,23 @@ func _physics_process(delta: float) -> void:
 			stomp()
 	else:
 		set_meta("stomp_triggered_this_frame", false)
+
+func play_wing_flap_sound() -> void:
+	if wing_flap_audio:
+		if wing_flap_sound and wing_flap_audio.stream == null:
+			wing_flap_audio.stream = wing_flap_sound
+		if wing_flap_audio.stream != null:
+			wing_flap_audio.pitch_scale = randf_range(0.95, 1.05)
+			wing_flap_audio.volume_db = randf_range(-2.0, 2.0)
+			wing_flap_audio.play()
+
+func play_screech_sound() -> void:
+	if screech_audio:
+		if screech_sound and screech_audio.stream == null:
+			screech_audio.stream = screech_sound
+		if screech_audio.stream != null:
+			screech_audio.pitch_scale = randf_range(0.9, 1.1)
+			screech_audio.play()
 
 func update_animation(input_dir: Vector2) -> void:
 	if animated_sprite == null or animated_sprite.sprite_frames == null:
@@ -118,7 +150,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			stomp()
 
 func stomp() -> void:
-	spawn_sound_wave(8.5, 3.5, 64, 1.6)
+	play_screech_sound()
+	spawn_sound_wave(8.5, 3.5, 64, 1.5)
 	shake_camera()
 
 	if animated_sprite and animated_sprite.sprite_frames:
