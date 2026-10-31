@@ -7,11 +7,13 @@ const SEGMENTS: int = 16
 const WARNING_DURATION: float = 0.95
 
 @export_range(70.0, 230.0) var body_length: float = 130.0
-@export_range(4.0, 30.0) var sway_amplitude: float = 16.0
-@export_range(2.0, 18.0) var bob_amplitude: float = 8.0
+@export_range(4.0, 65.0) var sway_amplitude: float = 16.0
+@export_range(2.0, 36.0) var bob_amplitude: float = 8.0
 @export var motion_phase: float = 0.0
 @export var min_drop_delay: float = 24.0
 @export var max_drop_delay: float = 44.0
+@export_range(0.0, 700.0) var activation_distance: float = 0.0
+@export var activation_region: Rect2 = Rect2()
 
 @onready var body_fill: Polygon2D = $BodyFill
 @onready var outline: Line2D = $Outline
@@ -36,7 +38,8 @@ var head_damage: CollisionShape2D
 
 func _ready() -> void:
 	phase = motion_phase
-	drop_timer = randf_range(maxf(1.0, min_drop_delay), maxf(min_drop_delay, max_drop_delay))
+	var minimum_delay := maxf(0.1, min_drop_delay)
+	drop_timer = randf_range(minimum_delay, maxf(minimum_delay, max_drop_delay))
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = SONAR_SHADER
 	for line: Line2D in [outline, left_eye, right_eye, tongue, tongue_fork]:
@@ -74,7 +77,8 @@ func _physics_process(delta: float) -> void:
 	state_time += delta
 	match state:
 		State.HANGING:
-			drop_timer -= delta
+			if _player_in_drop_zone():
+				drop_timer -= delta
 			if drop_timer <= 0.0:
 				state = State.WARNING
 				state_time = 0.0
@@ -95,6 +99,17 @@ func _physics_process(delta: float) -> void:
 				else:
 					fall_velocity = fall_velocity.slide(collision.get_normal())
 	_update_shape()
+
+func _player_in_drop_zone() -> bool:
+	if activation_distance <= 0.0:
+		return true
+	var scene := get_tree().current_scene
+	if not scene:
+		return false
+	var player := scene.get_node_or_null("Player") as Node2D
+	if not player or global_position.distance_to(player.global_position) > activation_distance:
+		return false
+	return not activation_region.has_area() or activation_region.has_point(player.global_position)
 
 func _update_shape() -> void:
 	spine = PackedVector2Array()

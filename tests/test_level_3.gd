@@ -14,7 +14,8 @@ func check(condition: bool, message: String) -> void:
 		push_error(message)
 
 func travel(player: CharacterBody2D, target: Vector2) -> bool:
-	for frame in range(400):
+	var frame_limit := ceili(player.global_position.distance_to(target) / 220.0 * 60.0) + 180
+	for frame in range(frame_limit):
 		await physics_frame
 		if not is_instance_valid(player) or player.get("is_dead"):
 			return false
@@ -36,27 +37,35 @@ func run() -> void:
 	player.set_process_unhandled_input(false)
 	scene.get_node("LevelExit").monitoring = false
 	var snakes := get_nodes_in_group("hanging_snakes")
-	check(snakes.size() == 4, "Level 3 has four independent hanging snakes")
+	var tunnel_snakes := get_nodes_in_group("tunnel_snakes")
+	check(snakes.size() == 11 and tunnel_snakes.size() == 7, "The original four snakes are followed by seven tunnel snakes")
 	var spikes: Array = scene.get_node("Walls").get_children().filter(func(node): return node.has_node("DamageArea") and not node.is_in_group("hanging_snakes"))
 	check(not spikes.is_empty(), "Level 3 reuses the cave spike scene in a separate layout")
 	for snake in snakes:
-		check(snake.drop_timer >= 18.0, "A snake cannot fall immediately after level entry")
+		if not snake.is_in_group("tunnel_snakes"):
+			check(snake.drop_timer >= 18.0 and snake.sway_amplitude <= 20.0, "The original cave retains its rare falls and gentle motion")
 		snake.drop_timer = 1000.0
 	var snake = scene.get_node("Walls/MiddleHangingSnake")
 	var anchor: Vector2 = snake.position
 	var initial_head: Vector2 = snake.spine[16]
 	var head_min := initial_head
 	var head_max := initial_head
+	var strong_snake = scene.get_node("Walls/TunnelUpperSnakeC")
+	var strong_min: Vector2 = strong_snake.spine[16]
+	var strong_max := strong_min
 	for frame in range(240):
 		await physics_frame
 		var head_position: Vector2 = snake.spine[16]
 		head_min = head_min.min(head_position)
 		head_max = head_max.max(head_position)
+		strong_min = strong_min.min(strong_snake.spine[16])
+		strong_max = strong_max.max(strong_snake.spine[16])
 	check(head_max.x - head_min.x > 4.0 and head_max.y - head_min.y > 4.0, "Hanging snakes sway sideways and bob vertically")
+	check(strong_max.x - strong_min.x > 70.0 and strong_max.y - strong_min.y > 16.0, "Harder tunnel snakes have a visibly wider horizontal and vertical sweep")
 	check(snake.position == anchor and snake.spine[0].length() < 0.01, "The hanging tail remains attached to the ceiling")
 	check(snake.body_fill.color == Color.BLACK and snake.outline.default_color == Color.WHITE, "Snake visuals use white outlines without a bright fill")
 	check(not Geometry2D.triangulate_polygon(snake.body_fill.polygon).is_empty(), "The animated snake outline remains a valid polygon")
-	for target in [Vector2(250, 840), Vector2(1020, 840), Vector2(1020, 550), Vector2(580, 550), Vector2(580, 240), Vector2(1390, 240), Vector2(1390, 210), Vector2(1580, 210)]:
+	for target in [Vector2(250, 840), Vector2(1020, 840), Vector2(1020, 550), Vector2(580, 550), Vector2(580, 240), Vector2(1390, 240), Vector2(1390, 210), Vector2(1580, 210), Vector2(1780, 275), Vector2(3300, 275), Vector2(3300, 620), Vector2(1900, 620), Vector2(1900, 935), Vector2(3300, 935), Vector2(3320, 900)]:
 		var reached := await travel(player, target)
 		check(reached, "Safe route reaches " + str(target))
 		if not reached:
@@ -104,7 +113,30 @@ func run() -> void:
 	for frame in range(4320):
 		await physics_frame
 	for natural_snake in get_nodes_in_group("hanging_snakes"):
-		check(natural_snake.state == natural_snake.State.RESTING, "A naturally scheduled rare fall lands safely")
+		if natural_snake.is_in_group("tunnel_snakes"):
+			check(natural_snake.state == natural_snake.State.HANGING, "Distant tunnel snakes remain hanging until the player arrives")
+		else:
+			check(natural_snake.state == natural_snake.State.RESTING, "A naturally scheduled rare fall lands safely")
+	var first_tunnel_snake = current_scene.get_node("Walls/TunnelUpperSnakeA")
+	var waiting_timer: float = first_tunnel_snake.drop_timer
+	respawned_player.position = Vector2(2040, 470)
+	for frame in range(60):
+		await physics_frame
+	check(first_tunnel_snake.drop_timer == waiting_timer, "A nearby player in a different tunnel does not trigger a fall through the wall")
+	respawned_player.position = Vector2(1780, 275)
+	for frame in range(65):
+		await physics_frame
+	check(first_tunnel_snake.state == first_tunnel_snake.State.WARNING, "Approaching the tunnel produces a visible warning within about one second")
+	for frame in range(60):
+		await physics_frame
+	check(first_tunnel_snake.state == first_tunnel_snake.State.FALLING or first_tunnel_snake.state == first_tunnel_snake.State.RESTING, "The first tunnel snake falls within about two seconds of approach")
+	for frame in range(90):
+		await physics_frame
+	check(first_tunnel_snake.state == first_tunnel_snake.State.RESTING, "The triggered tunnel fall lands safely")
+	respawned_player.position = Vector2(2740, 935)
+	for frame in range(220):
+		await physics_frame
+	check(current_scene.get_node("Walls/TunnelLowerSnakeA").state == first_tunnel_snake.State.RESTING and current_scene.get_node("Walls/TunnelLowerSnakeB").state == first_tunnel_snake.State.RESTING, "The final tunnel also produces frequent visible falls")
 	respawned_player.position = current_scene.get_node("LevelExit").position
 	for frame in range(60):
 		await process_frame

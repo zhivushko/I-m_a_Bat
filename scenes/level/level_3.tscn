@@ -39,8 +39,8 @@ position = Vector2(30, 520)
 polygon_points = PackedVector2Array(-30, -520, 30, -520, 30, 520, -30, 520)
 
 [node name="RightBoundary" parent="Walls" instance=ExtResource("5_wall")]
-position = Vector2(1730, 520)
-polygon_points = PackedVector2Array(-30, -520, 30, -520, 30, 520, -30, 520)
+position = Vector2(1730, 680)
+polygon_points = PackedVector2Array(-30, -360, 30, -360, 30, 360, -30, 360)
 
 [node name="LowerShelf" parent="Walls" instance=ExtResource("5_wall")]
 position = Vector2(480, 625)
@@ -227,11 +227,173 @@ motion_phase = 1.3
 min_drop_delay = 46.0
 max_drop_delay = 68.0
 
+[node name="TunnelRoof" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(2630, 30)
+polygon_points = PackedVector2Array(-870, -30, 870, -30, 870, 30, -870, 30)
+
+[node name="TunnelBottom" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(2630, 1010)
+polygon_points = PackedVector2Array(-870, -30, 870, -30, 870, 30, -870, 30)
+
+[node name="TunnelRightBoundary" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(3470, 520)
+polygon_points = PackedVector2Array(-30, -520, 30, -520, 30, 520, -30, 520)
+
+[node name="UpperTunnelDivider" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(2460, 380)
+polygon_points = PackedVector2Array(-700, -60, 700, -60, 700, 60, -700, 60)
+
+[node name="LowerTunnelDivider" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(2730, 740)
+polygon_points = PackedVector2Array(-710, -60, 710, -60, 710, 60, -710, 60)
+
+[node name="TunnelUpperRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2280, 60)
+rotation = 3.1415927
+scale = Vector2(-0.55, 0.17)
+
+[node name="TunnelUpperRoofLong" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2305, 60)
+rotation = 3.1415927
+scale = Vector2(0.85, 0.68)
+
+[node name="TunnelUpperRoofSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2328, 60)
+rotation = 3.1415927
+scale = Vector2(-0.65, 0.27)
+
+[node name="TunnelUpperFloorSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2220, 320)
+rotation = 0
+scale = Vector2(0.65, 0.21)
+
+[node name="TunnelUpperFloorBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2240, 320)
+rotation = 0
+scale = Vector2(-0.5, 0.14)
+
+[node name="TunnelMiddleRoofSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2840, 440)
+rotation = 3.1415927
+scale = Vector2(0.65, 0.26)
+
+[node name="TunnelMiddleRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2862, 440)
+rotation = 3.1415927
+scale = Vector2(-0.55, 0.15)
+
+[node name="TunnelMiddleFloorBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2440, 680)
+rotation = 0
+scale = Vector2(-0.5, 0.14)
+
+[node name="TunnelMiddleFloorSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2464, 680)
+rotation = 0
+scale = Vector2(0.65, 0.22)
+
+[node name="TunnelLowerRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2360, 800)
+rotation = 3.1415927
+scale = Vector2(-0.55, 0.14)
+
+[node name="TunnelLowerRoofSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2383, 800)
+rotation = 3.1415927
+scale = Vector2(0.65, 0.23)
+
+[node name="TunnelLowerFloorBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2820, 980)
+rotation = 0
+scale = Vector2(0.55, 0.13)
+
+[node name="TunnelLowerFloorSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(2841, 980)
+rotation = 0
+scale = Vector2(-0.65, 0.18)
+
+[node name="TunnelUpperSnakeA" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2040, 66)
+body_length = 120.0
+sway_amplitude = 48.0
+bob_amplitude = 22.0
+motion_phase = 0.6
+min_drop_delay = 0.6
+max_drop_delay = 1.0
+activation_distance = 430.0
+activation_region = Rect2(1760, 60, 1400, 260)
+
+[node name="TunnelUpperSnakeB" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2540, 66)
+body_length = 142.0
+sway_amplitude = 24.0
+bob_amplitude = 14.0
+motion_phase = 2.8
+min_drop_delay = 1.1
+max_drop_delay = 1.8
+activation_distance = 430.0
+activation_region = Rect2(1760, 60, 1400, 260)
+
+[node name="TunnelUpperSnakeC" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2920, 66)
+body_length = 125.0
+sway_amplitude = 56.0
+bob_amplitude = 26.0
+motion_phase = 4.5
+min_drop_delay = 0.8
+max_drop_delay = 1.4
+activation_distance = 430.0
+activation_region = Rect2(1760, 60, 1400, 260)
+
+[node name="TunnelMiddleSnakeA" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2700, 446)
+body_length = 105.0
+sway_amplitude = 44.0
+bob_amplitude = 20.0
+motion_phase = 1.8
+min_drop_delay = 0.5
+max_drop_delay = 1.1
+activation_distance = 430.0
+activation_region = Rect2(1760, 440, 1680, 240)
+
+[node name="TunnelMiddleSnakeB" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2220, 446)
+body_length = 112.0
+sway_amplitude = 26.0
+bob_amplitude = 12.0
+motion_phase = 3.6
+min_drop_delay = 0.7
+max_drop_delay = 1.4
+activation_distance = 430.0
+activation_region = Rect2(1760, 440, 1680, 240)
+
+[node name="TunnelLowerSnakeA" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(2620, 806)
+body_length = 75.0
+sway_amplitude = 22.0
+bob_amplitude = 10.0
+motion_phase = 2.3
+min_drop_delay = 0.7
+max_drop_delay = 1.1
+activation_distance = 430.0
+activation_region = Rect2(1760, 800, 1680, 180)
+
+[node name="TunnelLowerSnakeB" parent="Walls" groups=["tunnel_snakes"] instance=ExtResource("7_snake")]
+position = Vector2(3040, 806)
+body_length = 80.0
+sway_amplitude = 38.0
+bob_amplitude = 14.0
+motion_phase = 5.1
+min_drop_delay = 0.6
+max_drop_delay = 1.0
+activation_distance = 430.0
+activation_region = Rect2(1760, 800, 1680, 180)
+
 [node name="Player" parent="." unique_id=893422595 instance=ExtResource("2_player")]
 position = Vector2(160, 800)
 
 [node name="LevelExit" parent="." unique_id=766345126 instance=ExtResource("3_exit")]
-position = Vector2(1580, 210)
+position = Vector2(3320, 900)
 current_level_index = 3
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1691415190]
@@ -262,3 +424,13 @@ sound_type = "rock"
 
 [node name="UpperDrips" parent="AudioPoints" instance=ExtResource("8_sound")]
 position = Vector2(1360, 240)
+
+[node name="TunnelDrips" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(1910, 250)
+
+[node name="TunnelRocks" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(3100, 570)
+sound_type = "rock"
+
+[node name="TunnelDepthDrips" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(1910, 880)
