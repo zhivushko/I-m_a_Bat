@@ -92,11 +92,12 @@ func _physics_process(delta: float) -> void:
 
 	update_animation(input_dir)
 
+	update_wing_flap_audio(velocity.length() > 10.0)
+
 	if velocity.length() > 10.0:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
-			play_wing_flap_sound()
 			#spawn_sound_wave(3.5, 2.0, 24, 1.2)
 	else:
 		step_timer = step_interval
@@ -202,3 +203,24 @@ func _show_death_effect() -> void:
 	var effect := DEATH_EFFECT.instantiate()
 	get_tree().root.add_child(effect)
 	effect.play(screen_origin)
+	
+func update_wing_flap_audio(is_moving: bool) -> void:
+	if wing_flap_audio == null or wing_flap_audio.stream == null:
+		return
+	if is_moving and not wing_flap_audio.playing:
+		wing_flap_audio.volume_db = -40.0
+		wing_flap_audio.pitch_scale = randf_range(0.95, 1.05)
+		wing_flap_audio.play()
+		create_tween().tween_property(wing_flap_audio, "volume_db", -10.0, 0.2)
+	
+	elif not is_moving and wing_flap_audio.playing:
+		if wing_flap_audio.get_meta("fading_out", false):
+			return
+		wing_flap_audio.set_meta("fading_out", true)
+		
+		var t = create_tween()
+		t.tween_property(wing_flap_audio, "volume_db", -40.0, 0.25)
+		t.tween_callback(func():
+			wing_flap_audio.stop()
+			wing_flap_audio.set_meta("fading_out", false)
+		)
