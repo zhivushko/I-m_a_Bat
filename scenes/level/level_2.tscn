@@ -199,15 +199,6 @@ current_level_index = 2
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=986291746]
 
-[node name="ControlHint" type="Label" parent="UI" unique_id=316974483]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 850.0
-offset_bottom = 110.0
-text = "Уровень 2 | Шипы в темноте
-WASD / Стрелки — полёт · Пробел — эхолокация
-Облетайте белые шипы. Касание возвращает в начало."
-
 [node name="AmbientHum" type="AudioStreamPlayer" parent="." unique_id=1296820412]
 stream = ExtResource("4_c0fdf")
 volume_db = -30.5
