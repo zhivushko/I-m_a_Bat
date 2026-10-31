@@ -102,11 +102,16 @@ func _physics_process(delta: float) -> void:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
-			play_wing_flap_sound()
-			#spawn_sound_wave(3.5, 2.0, 24, 1.2)
 	else:
 		step_timer = step_interval
-
+	
+	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_SPACE):
+		if not get_meta("stomp_triggered_this_frame", false):
+			set_meta("stomp_triggered_this_frame", true)
+			stomp()
+	else:
+		set_meta("stomp_triggered_this_frame", false)
+		
 func play_wing_flap_sound() -> void:
 	if wing_flap_audio:
 		if wing_flap_sound and wing_flap_audio.stream == null:
