@@ -4,6 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://13n2vsfqwo72" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/world/LevelExit.tscn" id="3_exit"]
 [ext_resource type="AudioStream" uid="uid://crm2n880xhy36" path="res://assets/sounds/Gul.ogg" id="4_ss58e"]
+[ext_resource type="PackedScene" path="res://scenes/world/Wall.tscn" id="5_wall"]
+[ext_resource type="PackedScene" path="res://scenes/world/Spike.tscn" id="6_spike"]
+[ext_resource type="PackedScene" path="res://scenes/world/HangingSnake.tscn" id="7_snake"]
+[ext_resource type="PackedScene" path="res://scenes/fx/SoundPoint.tscn" id="8_sound"]
 
 [node name="Level3" type="Node2D" unique_id=880002118]
 script = ExtResource("1_main")
@@ -21,11 +25,213 @@ color = Color(0, 0, 0, 1)
 
 [node name="Walls" type="Node2D" parent="." unique_id=903959270]
 
+
+[node name="TopBoundary" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(880, 30)
+polygon_points = PackedVector2Array(-880, -30, 880, -30, 880, 30, -880, 30)
+
+[node name="BottomBoundary" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(880, 1010)
+polygon_points = PackedVector2Array(-880, -30, 880, -30, 880, 30, -880, 30)
+
+[node name="LeftBoundary" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(30, 520)
+polygon_points = PackedVector2Array(-30, -520, 30, -520, 30, 520, -30, 520)
+
+[node name="RightBoundary" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(1730, 520)
+polygon_points = PackedVector2Array(-30, -520, 30, -520, 30, 520, -30, 520)
+
+[node name="LowerShelf" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(480, 625)
+polygon_points = PackedVector2Array(-420, -25, 420, -25, 420, 25, -420, 25)
+
+[node name="UpperShelf" parent="Walls" instance=ExtResource("5_wall")]
+position = Vector2(1200, 345)
+polygon_points = PackedVector2Array(-500, -25, 500, -25, 500, 25, -500, 25)
+
+[node name="LowerFloorBud1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(376, 980)
+rotation = 0
+scale = Vector2(0.6, 0.17)
+
+[node name="LowerFloorSmall1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(397, 980)
+rotation = 0
+scale = Vector2(-0.7, 0.3)
+
+[node name="LowerFloorLong" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(443, 980)
+rotation = 0
+scale = Vector2(1, 0.95)
+
+[node name="LowerFloorBud2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(466, 980)
+rotation = 0
+scale = Vector2(-0.55, 0.19)
+
+[node name="LowerFloorSmall2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(490, 980)
+rotation = 0
+scale = Vector2(0.7, 0.36)
+
+[node name="LowerFloorBud3" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(512, 980)
+rotation = 0
+scale = Vector2(-0.5, 0.14)
+
+[node name="LowerRoofSmall1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(316, 650)
+rotation = 3.1415927
+scale = Vector2(-0.65, 0.24)
+
+[node name="LowerRoofLong" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(348, 650)
+rotation = 3.1415927
+scale = Vector2(0.9, 0.72)
+
+[node name="LowerRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(371, 650)
+rotation = 3.1415927
+scale = Vector2(0.5, 0.16)
+
+[node name="LowerRoofSmall2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(397, 650)
+rotation = 3.1415927
+scale = Vector2(-0.7, 0.31)
+
+[node name="LowerShelfEndBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(900, 608)
+rotation = 1.5707963
+scale = Vector2(0.5, 0.17)
+
+[node name="LowerShelfEndTooth" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(900, 628)
+rotation = 1.5707963
+scale = Vector2(-0.75, 0.42)
+
+[node name="LowerShelfEndSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(900, 645)
+rotation = 1.5707963
+scale = Vector2(0.6, 0.24)
+
+[node name="MiddleFloorBud1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(628, 600)
+rotation = 0
+scale = Vector2(0.55, 0.16)
+
+[node name="MiddleFloorSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(651, 600)
+rotation = 0
+scale = Vector2(-0.7, 0.32)
+
+[node name="MiddleFloorBud2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(677, 600)
+rotation = 0
+scale = Vector2(0.55, 0.19)
+
+[node name="UpperRoofSmall1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(984, 370)
+rotation = 3.1415927
+scale = Vector2(-0.65, 0.25)
+
+[node name="UpperRoofLong" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1010, 370)
+rotation = 3.1415927
+scale = Vector2(0.9, 0.7)
+
+[node name="UpperRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1033, 370)
+rotation = 3.1415927
+scale = Vector2(0.5, 0.16)
+
+[node name="UpperShelfEndSmall1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(700, 334)
+rotation = -1.5707963
+scale = Vector2(-0.6, 0.24)
+
+[node name="UpperShelfEndBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(700, 355)
+rotation = -1.5707963
+scale = Vector2(0.5, 0.14)
+
+[node name="TopFloorBud1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1453, 320)
+rotation = 0
+scale = Vector2(-0.55, 0.17)
+
+[node name="TopFloorSmall" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1475, 320)
+rotation = 0
+scale = Vector2(0.7, 0.32)
+
+[node name="TopFloorMedium" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1500, 320)
+rotation = 0
+scale = Vector2(-0.8, 0.55)
+
+[node name="TopFloorBud2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1521, 320)
+rotation = 0
+scale = Vector2(0.55, 0.19)
+
+[node name="TopRoofSmall1" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1510, 60)
+rotation = 3.1415927
+scale = Vector2(-0.7, 0.3)
+
+[node name="TopRoofLong" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1540, 60)
+rotation = 3.1415927
+scale = Vector2(0.9, 0.9)
+
+[node name="TopRoofBud" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1563, 60)
+rotation = 3.1415927
+scale = Vector2(-0.5, 0.16)
+
+[node name="TopRoofSmall2" parent="Walls" instance=ExtResource("6_spike")]
+position = Vector2(1584, 60)
+rotation = 3.1415927
+scale = Vector2(0.65, 0.24)
+
+[node name="LowerHangingSnake" parent="Walls" instance=ExtResource("7_snake")]
+position = Vector2(430, 656)
+body_length = 110.0
+sway_amplitude = 15.0
+motion_phase = 0.3
+min_drop_delay = 18.0
+max_drop_delay = 30.0
+
+[node name="MiddleHangingSnake" parent="Walls" instance=ExtResource("7_snake")]
+position = Vector2(840, 376)
+body_length = 120.0
+sway_amplitude = 18.0
+motion_phase = 2.1
+min_drop_delay = 28.0
+max_drop_delay = 44.0
+
+[node name="DeepHangingSnake" parent="Walls" instance=ExtResource("7_snake")]
+position = Vector2(1180, 376)
+body_length = 165.0
+sway_amplitude = 20.0
+motion_phase = 4.4
+min_drop_delay = 38.0
+max_drop_delay = 58.0
+
+[node name="UpperHangingSnake" parent="Walls" instance=ExtResource("7_snake")]
+position = Vector2(1230, 66)
+body_length = 125.0
+sway_amplitude = 16.0
+motion_phase = 1.3
+min_drop_delay = 46.0
+max_drop_delay = 68.0
+
 [node name="Player" parent="." unique_id=893422595 instance=ExtResource("2_player")]
-position = Vector2(160, 360)
+position = Vector2(160, 800)
 
 [node name="LevelExit" parent="." unique_id=766345126 instance=ExtResource("3_exit")]
-position = Vector2(1150, 360)
+position = Vector2(1580, 210)
 current_level_index = 3
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1691415190]
@@ -33,9 +239,11 @@ current_level_index = 3
 [node name="ControlHint" type="Label" parent="UI" unique_id=19731539]
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 500.0
-offset_bottom = 70.0
-text = "Уровень 3 | Финальный уровень!"
+offset_right = 950.0
+offset_bottom = 115.0
+text = "Уровень 3 | Змеиные своды
+Пробел — эхолокация · Облетайте шипы и змей
+Змеи покачиваются. Если змея подтянулась — она готовится упасть."
 
 [node name="AmbientHum" type="AudioStreamPlayer" parent="." unique_id=1739622302]
 stream = ExtResource("4_ss58e")
@@ -44,3 +252,13 @@ autoplay = true
 parameters/looping = true
 
 [node name="AudioPoints" type="Node2D" parent="." unique_id=59597524]
+
+[node name="LowerDrips" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(740, 840)
+
+[node name="MiddleRocks" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(580, 480)
+sound_type = "rock"
+
+[node name="UpperDrips" parent="AudioPoints" instance=ExtResource("8_sound")]
+position = Vector2(1360, 240)
