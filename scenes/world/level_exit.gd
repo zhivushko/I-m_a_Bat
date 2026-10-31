@@ -11,7 +11,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body: Node2D) -> void:
-	if is_activated:
+	if is_activated or body.get("is_dead") == true:
 		return
 
 	if body.is_in_group("player") or body is CharacterBody2D or body.name == "Player":

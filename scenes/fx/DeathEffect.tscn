@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/fx/death_effect.gd" id="1_script"]
+[ext_resource type="Shader" path="res://assets/shaders/death_blood.gdshader" id="2_shader"]
+[ext_resource type="AudioStream" path="res://assets/sounds/deth_sound.wav" id="3_death_sound"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blood"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+
+[node name="DeathEffect" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_script")
+
+[node name="Overlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_blood")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_death_sound")
+volume_db = 4.0

@@ -35,7 +35,4 @@ func _on_body_entered(body: Node2D) -> void:
 	if restarting or body != get_tree().current_scene.get_node_or_null("Player"):
 		return
 	restarting = true
-	_restart_level.call_deferred()
-
-func _restart_level() -> void:
-	get_tree().reload_current_scene()
+	body.die()

@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const DEATH_EFFECT: PackedScene = preload("res://scenes/fx/DeathEffect.tscn")
+
 @export var speed: float = 220.0
 @export var step_interval: float = 0.45
 @export var sound_wave_scene: PackedScene = preload("res://scenes/fx/SoundWave.tscn")
@@ -9,6 +11,7 @@ extends CharacterBody2D
 @export var wing_flap_sound: AudioStream
 
 var step_timer: float = 0.0
+var is_dead: bool = false
 
 @onready var light: PointLight2D = $PointLight2D
 @onready var contour_line: Line2D = $Line2D
@@ -75,6 +78,8 @@ func create_player_glow_texture() -> GradientTexture2D:
 	return tex
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	if input_dir == Vector2.ZERO:
@@ -150,6 +155,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			stomp()
 
 func stomp() -> void:
+	if is_dead:
+		return
 	play_screech_sound()
 	spawn_sound_wave(8.5, 3.5, 64, 1.5)
 	shake_camera()
@@ -178,3 +185,20 @@ func spawn_sound_wave(max_scale: float, energy: float, num_rays: int, duration: 
 	wave.ray_count = num_rays
 	wave.fade_duration = duration
 	get_parent().add_child(wave)
+
+func die() -> void:
+	if is_dead or get_tree().paused:
+		return
+	is_dead = true
+	velocity = Vector2.ZERO
+	set_physics_process(false)
+	set_process_unhandled_input(false)
+	wing_flap_audio.stop()
+	screech_audio.stop()
+	_show_death_effect.call_deferred()
+
+func _show_death_effect() -> void:
+	var screen_origin := get_global_transform_with_canvas().origin / get_viewport_rect().size
+	var effect := DEATH_EFFECT.instantiate()
+	get_tree().root.add_child(effect)
+	effect.play(screen_origin)
