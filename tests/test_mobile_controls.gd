@@ -164,6 +164,8 @@ func run() -> void:
 			await process_frame
 		var screen := Rect2(Vector2.ZERO, controls.size)
 		check(screen.has_point(controls.joystick_center) and screen.has_point(controls.sonar_center) and screen.has_point(controls.pause_center), "Touch controls stay on screen after resizing to " + str(window_size))
+		check(screen.encloses(controls.charge_bar.get_global_rect()), "The charge indicator stays within the resized viewport")
+		check(controls.charge_bar.get_global_rect().end.x < controls.pause_center.x - 34.0 * controls.ui_scale, "The charge indicator stays clear of the pause button")
 		touch(30, controls.joystick_center + Vector2(56 * controls.touch_scale, 0), true)
 		check(controls.movement.x > 0.99, "Physical touch coordinates still hit the joystick at " + str(window_size))
 		touch(30, controls.joystick_center, false)

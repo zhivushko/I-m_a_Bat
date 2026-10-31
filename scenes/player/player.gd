@@ -1,10 +1,15 @@
 extends CharacterBody2D
 
 const DEATH_EFFECT: PackedScene = preload("res://scenes/fx/DeathEffect.tscn")
+const MAX_SONAR_CHARGES: int = 3
+
+signal sonar_charges_changed(available: int, recharge_progress: float)
+signal sonar_blocked
 
 @export var speed: float = 220.0
 @export var step_interval: float = 0.45
 @export var sound_wave_scene: PackedScene = preload("res://scenes/fx/SoundWave.tscn")
+@export_range(0.25, 10.0, 0.25) var sonar_recharge_seconds: float = 2.0
 
 @export_group("Audio")
 @export var screech_sound: AudioStream
@@ -13,6 +18,8 @@ const DEATH_EFFECT: PackedScene = preload("res://scenes/fx/DeathEffect.tscn")
 var step_timer: float = 0.0
 var is_dead: bool = false
 var mobile_movement: Vector2 = Vector2.ZERO
+var sonar_charges: int = MAX_SONAR_CHARGES
+var sonar_recharge_elapsed: float = 0.0
 
 @onready var light: PointLight2D = $PointLight2D
 @onready var contour_line: Line2D = $Line2D
@@ -81,6 +88,7 @@ func create_player_glow_texture() -> GradientTexture2D:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	_update_sonar_recharge(delta)
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	if input_dir == Vector2.ZERO:
@@ -153,8 +161,13 @@ func set_mobile_movement(direction: Vector2) -> void:
 	mobile_movement = direction.limit_length(1.0)
 
 func stomp() -> void:
-	if is_dead:
+	if is_dead or get_tree().paused:
 		return
+	if sonar_charges <= 0:
+		sonar_blocked.emit()
+		return
+	sonar_charges -= 1
+	sonar_charges_changed.emit(sonar_charges, get_sonar_recharge_progress())
 	play_screech_sound()
 	spawn_sound_wave(8.5, 3.5, 64, 1.5)
 	shake_camera()
@@ -164,6 +177,23 @@ func stomp() -> void:
 			animated_sprite.play("stomp")
 		elif animated_sprite.sprite_frames.has_animation("attack"):
 			animated_sprite.play("attack")
+
+func _update_sonar_recharge(delta: float) -> void:
+	if sonar_charges >= MAX_SONAR_CHARGES:
+		return
+	var duration := maxf(0.25, sonar_recharge_seconds)
+	sonar_recharge_elapsed += delta
+	while sonar_recharge_elapsed >= duration and sonar_charges < MAX_SONAR_CHARGES:
+		sonar_recharge_elapsed -= duration
+		sonar_charges += 1
+	if sonar_charges == MAX_SONAR_CHARGES:
+		sonar_recharge_elapsed = 0.0
+	sonar_charges_changed.emit(sonar_charges, get_sonar_recharge_progress())
+
+func get_sonar_recharge_progress() -> float:
+	if sonar_charges >= MAX_SONAR_CHARGES:
+		return 0.0
+	return clampf(sonar_recharge_elapsed / maxf(0.25, sonar_recharge_seconds), 0.0, 1.0)
 
 func shake_camera() -> void:
 	if camera:

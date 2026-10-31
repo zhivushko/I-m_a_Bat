@@ -13,6 +13,7 @@ const TOUCH_SIZE_MULTIPLIER: float = 1.1
 @onready var levels_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Levels
 @onready var settings_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Settings
 @onready var main_menu_button: Button = $PausePanel/Center/Panel/Margin/Buttons/MainMenu
+@onready var charge_bar: PanelContainer = $SonarChargeBar
 
 var movement: Vector2 = Vector2.ZERO
 var joystick_center: Vector2
@@ -26,6 +27,7 @@ var joystick_offset: Vector2 = Vector2.ZERO
 var sonar_flash: float = 0.0
 var owns_pause: bool = false
 var player: CharacterBody2D
+var sonar_available: bool = true
 
 func _ready() -> void:
 	resized.connect(_update_layout)
@@ -40,6 +42,16 @@ func bind_player(target: CharacterBody2D) -> void:
 	player = target
 	movement_changed.connect(player.set_mobile_movement)
 	sonar_pressed.connect(player.stomp)
+	player.sonar_charges_changed.connect(_on_sonar_charges_changed)
+	player.sonar_blocked.connect(charge_bar.flash_empty)
+	_on_sonar_charges_changed(player.sonar_charges, player.get_sonar_recharge_progress())
+
+func _on_sonar_charges_changed(available: int, progress: float) -> void:
+	var was_available := sonar_available
+	sonar_available = available > 0
+	charge_bar.set_charges(available, progress)
+	if was_available != sonar_available:
+		queue_redraw()
 
 func _process(delta: float) -> void:
 	var blocked: bool = not is_instance_valid(player) or player.get("is_dead") == true
@@ -68,6 +80,9 @@ func _update_layout() -> void:
 	joystick_center = Vector2(insets.x + 148.0 * ui_scale, bottom)
 	sonar_center = Vector2(size.x - insets.z - 148.0 * ui_scale, bottom)
 	pause_center = Vector2(size.x - insets.z - 54.0 * ui_scale, insets.y + 54.0 * ui_scale)
+	charge_bar.scale = Vector2.ONE * ui_scale
+	charge_bar.position = Vector2((insets.x + size.x - insets.z - charge_bar.size.x * ui_scale) * 0.5,
+		insets.y + 28.0 * ui_scale)
 	queue_redraw()
 
 func _draw() -> void:
@@ -81,15 +96,16 @@ func _draw() -> void:
 	draw_circle(knob, 27.0 * touch_scale, Color(1, 1, 1, 0.08))
 	draw_arc(knob, 27.0 * touch_scale, 0.0, TAU, 48, active, 1.5 * touch_scale, true)
 	draw_circle(knob, 2.0 * touch_scale, active)
-	var echo_active := sonar_pointer != -1 or sonar_flash > 0.0
+	var echo_active := sonar_available and (sonar_pointer != -1 or sonar_flash > 0.0)
 	draw_circle(sonar_center, 56.0 * touch_scale, Color(1, 1, 1, 0.13 if echo_active else 0.035))
 	draw_arc(sonar_center, 56.0 * touch_scale, 0.0, TAU, 64, active if echo_active else white, 1.5 * touch_scale, true)
 	for index in range(3):
 		draw_arc(sonar_center, (12.0 + index * 11.0) * touch_scale, -PI * 0.7, PI * 0.7, 32,
-			Color(1, 1, 1, 0.85 - index * 0.2), 1.6 * touch_scale, true)
-	draw_circle(sonar_center, 3.0 * touch_scale, active)
+			Color(1, 1, 1, (0.85 - index * 0.2) * (1.0 if sonar_available else 0.35)), 1.6 * touch_scale, true)
+	draw_circle(sonar_center, 3.0 * touch_scale, active if sonar_available else white)
 	draw_string(ThemeDB.fallback_font, sonar_center + Vector2(-60, 88) * touch_scale,
-		"ЭХО", HORIZONTAL_ALIGNMENT_CENTER, 120.0 * touch_scale, int(16 * touch_scale), active)
+		"ЭХО" if sonar_available else "ЗАРЯДКА", HORIZONTAL_ALIGNMENT_CENTER,
+		120.0 * touch_scale, int((16 if sonar_available else 12) * touch_scale), active if sonar_available else white)
 	draw_circle(pause_center, 24.0 * ui_scale, Color(0, 0, 0, 0.25))
 	draw_arc(pause_center, 24.0 * ui_scale, 0.0, TAU, 48, white, ui_scale, true)
 	for x in [-5.0, 5.0]:
@@ -131,7 +147,7 @@ func _press(pointer: int, point: Vector2) -> bool:
 		return true
 	if sonar_pointer == -1 and point.distance_to(sonar_center) <= 72.0 * touch_scale:
 		sonar_pointer = pointer
-		sonar_flash = 0.16
+		sonar_flash = 0.16 if sonar_available else 0.0
 		sonar_pressed.emit()
 		queue_redraw()
 		return true
