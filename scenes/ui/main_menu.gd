@@ -1,22 +1,23 @@
 extends Control
 
-@onready var play_button: Button = $MarginContainer/VBoxContainer/MenuContainer/PlayButton
-@onready var settings_button: Button = $MarginContainer/VBoxContainer/MenuContainer/SettingsButton
-@onready var quit_button: Button = $MarginContainer/VBoxContainer/MenuContainer/QuitButton
+@onready var play_button: Button = $Center/Panel/Margin/Content/PlayButton
+@onready var settings_button: Button = $Center/Panel/Margin/Content/SettingsButton
+@onready var quit_button: Button = $Center/Panel/Margin/Content/QuitButton
 
 func _ready() -> void:
-	if play_button:
-		play_button.pressed.connect(_on_play_button_pressed)
-	if settings_button:
-		settings_button.pressed.connect(_on_settings_button_pressed)
-	if quit_button:
-		quit_button.pressed.connect(_on_quit_button_pressed)
+	play_button.pressed.connect(_on_play_button_pressed)
+	settings_button.pressed.connect(_on_settings_button_pressed)
+	quit_button.pressed.connect(_on_quit_button_pressed)
+	play_button.grab_focus()
 
 func _on_play_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
+	MenuNavigation.open_level_select()
 
 func _on_settings_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/SettingsMenu.tscn")
+	MenuNavigation.open_settings(MenuNavigation.MAIN_MENU)
 
 func _on_quit_button_pressed() -> void:
-	get_tree().quit()
+	MenuNavigation.request_quit()
+
+func navigate_back() -> void:
+	MenuNavigation.request_quit()

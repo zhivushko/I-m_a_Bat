@@ -10,6 +10,8 @@ const DEAD_ZONE: float = 0.12
 @onready var resume_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Resume
 @onready var restart_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Restart
 @onready var levels_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Levels
+@onready var settings_button: Button = $PausePanel/Center/Panel/Margin/Buttons/Settings
+@onready var main_menu_button: Button = $PausePanel/Center/Panel/Margin/Buttons/MainMenu
 
 var movement: Vector2 = Vector2.ZERO
 var joystick_center: Vector2
@@ -28,6 +30,8 @@ func _ready() -> void:
 	resume_button.pressed.connect(_resume)
 	restart_button.pressed.connect(_restart)
 	levels_button.pressed.connect(_open_levels)
+	settings_button.pressed.connect(_open_settings)
+	main_menu_button.pressed.connect(_open_main_menu)
 	_update_layout()
 
 func bind_player(target: CharacterBody2D) -> void:
@@ -173,6 +177,7 @@ func _open_pause() -> void:
 	owns_pause = true
 	pause_panel.show()
 	get_tree().paused = true
+	resume_button.grab_focus()
 
 func _resume() -> void:
 	pause_panel.hide()
@@ -182,11 +187,24 @@ func _resume() -> void:
 
 func _restart() -> void:
 	_resume()
-	get_tree().reload_current_scene.call_deferred()
+	MenuNavigation.go_to_scene(get_tree().current_scene.scene_file_path)
 
 func _open_levels() -> void:
 	_resume()
-	get_tree().change_scene_to_file.call_deferred("res://scenes/ui/LevelSelect.tscn")
+	MenuNavigation.open_level_select()
+
+func _open_main_menu() -> void:
+	_resume()
+	MenuNavigation.open_main_menu()
+
+func _open_settings() -> void:
+	_release_all()
+	pause_panel.hide()
+	MenuNavigation.open_pause_settings(self)
+
+func restore_pause_menu() -> void:
+	pause_panel.show()
+	settings_button.grab_focus()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT or what == NOTIFICATION_APPLICATION_FOCUS_OUT:

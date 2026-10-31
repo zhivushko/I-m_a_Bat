@@ -1,94 +1,85 @@
-[gd_scene format=3 uid="uid://cqh1wm0lybh0s"]
+[gd_scene load_steps=3 format=3 uid="uid://cqh1wm0lybh0s"]
 
-[ext_resource type="Script" uid="uid://uldnvqfufyu0" path="res://scenes/ui/main_menu.gd" id="1_menu"]
-[ext_resource type="Texture2D" uid="uid://cf06sdy4fri48" path="res://preview.jpg" id="2_6jbdy"]
+[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1_script"]
+[ext_resource type="Theme" path="res://scenes/ui/menu_theme.tres" id="2_theme"]
 
-[node name="MainMenu" type="Control" unique_id=1725245834]
+[node name="MainMenu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_menu")
+mouse_filter = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1524459263]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -648.0
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("2_6jbdy")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="ColorBg" type="ColorRect" parent="." unique_id=1625938066]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.050980393, 0.050980393, 0.078431375, 0.6509804)
+color = Color(0, 0, 0, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2024724690]
+[node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 60
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 60
+mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=712810962]
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
 
-[node name="LogoTexture" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=898975268]
-custom_minimum_size = Vector2(0, 100)
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
 layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
 
-[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/LogoTexture" unique_id=511824105]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 48
-text = "ECHOLOCATION IN DARKNESS"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MenuContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1318533963]
-custom_minimum_size = Vector2(280, 0)
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
-[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=180198388]
-custom_minimum_size = Vector2(0, 50)
+[node name="Title" type="Label" parent="Center/Panel/Margin/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 36
+text = "I'm a Bat"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 18
+text = "Эхолокация в темноте"
+horizontal_alignment = 1
+
+[node name="Spacing" type="Control" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PlayButton" type="Button" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Играть"
 
-[node name="SettingsButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=1297988373]
-custom_minimum_size = Vector2(0, 50)
+[node name="SettingsButton" type="Button" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+size_flags_horizontal = 3
 text = "Настройки"
 
-[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=1178955569]
-custom_minimum_size = Vector2(0, 50)
+[node name="QuitButton" type="Button" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+size_flags_horizontal = 3
 text = "Выход"

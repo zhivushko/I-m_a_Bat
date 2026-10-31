@@ -23,9 +23,9 @@ func unlock_next_level(current_lvl_index: int) -> void:
 func load_level(level_index: int) -> void:
 	if level_paths.has(level_index):
 		var path = level_paths[level_index]
-		get_tree().change_scene_to_file(path)
+		MenuNavigation.go_to_scene(path)
 	else:
-		get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
+		MenuNavigation.open_level_select()
 
 func complete_level(current_lvl_index: int) -> void:
 	unlock_next_level(current_lvl_index)
@@ -33,7 +33,7 @@ func complete_level(current_lvl_index: int) -> void:
 	if level_paths.has(next_lvl) and next_lvl <= unlocked_levels:
 		load_level(next_lvl)
 	else:
-		get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
+		MenuNavigation.open_level_select()
 
 func save_progress() -> void:
 	var config = ConfigFile.new()
