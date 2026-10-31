@@ -27,7 +27,35 @@ func travel(player: CharacterBody2D, target: Vector2) -> bool:
 		player.move_and_slide()
 	return false
 
+func check_growing_drop_risk() -> void:
+	var sampler = load("res://scenes/world/HangingSnake.tscn").instantiate()
+	sampler.min_drop_delay = 4.5
+	sampler.drop_chance_growth = 0.18
+	sampler.drop_rng.seed = 57249
+	var earliest := INF
+	var early_survivors := 0
+	var late_survivors := 0
+	var early_falls := 0
+	var late_falls := 0
+	for sample in range(10000):
+		var delay: float = sampler._sample_drop_delay()
+		earliest = minf(earliest, delay)
+		if delay > 5.5:
+			early_survivors += 1
+			if delay <= 6.5:
+				early_falls += 1
+		if delay > 8.5:
+			late_survivors += 1
+			if delay <= 9.5:
+				late_falls += 1
+	check(earliest >= 4.5, "Random falls never begin before the 4.5-second grace period")
+	var early_probability := float(early_falls) / early_survivors
+	var late_probability := float(late_falls) / late_survivors
+	check(late_probability > early_probability + 0.15, "The next-second chance of a fall increases as the snake keeps hanging")
+	sampler.free()
+
 func run() -> void:
+	check_growing_drop_risk()
 	var scene = load("res://scenes/level/level_3.tscn").instantiate()
 	root.add_child(scene)
 	current_scene = scene
@@ -44,6 +72,8 @@ func run() -> void:
 	for snake in snakes:
 		if not snake.is_in_group("tunnel_snakes"):
 			check(snake.drop_timer >= 18.0 and snake.sway_amplitude <= 20.0, "The original cave retains its rare falls and gentle motion")
+		else:
+			check(snake.min_drop_delay == 4.5 and snake.drop_chance_growth > 0.0, "Tunnel snakes use the grace period and gradually increasing risk")
 		snake.drop_timer = 1000.0
 	var snake = scene.get_node("Walls/MiddleHangingSnake")
 	var anchor: Vector2 = snake.position
@@ -124,19 +154,25 @@ func run() -> void:
 		await physics_frame
 	check(first_tunnel_snake.drop_timer == waiting_timer, "A nearby player in a different tunnel does not trigger a fall through the wall")
 	respawned_player.position = Vector2(1780, 275)
+	for frame in range(264):
+		await physics_frame
+	check(first_tunnel_snake.state == first_tunnel_snake.State.HANGING, "Approaching the tunnel causes no fall during the first 4.4 seconds")
+	for frame in range(ceili((waiting_timer - 4.4) * 60.0) + 4):
+		await physics_frame
+	check(first_tunnel_snake.state == first_tunnel_snake.State.WARNING, "The randomly chosen later fall still gives a warning")
 	for frame in range(65):
 		await physics_frame
-	check(first_tunnel_snake.state == first_tunnel_snake.State.WARNING, "Approaching the tunnel produces a visible warning within about one second")
-	for frame in range(60):
-		await physics_frame
-	check(first_tunnel_snake.state == first_tunnel_snake.State.FALLING or first_tunnel_snake.state == first_tunnel_snake.State.RESTING, "The first tunnel snake falls within about two seconds of approach")
+	check(first_tunnel_snake.state == first_tunnel_snake.State.FALLING or first_tunnel_snake.state == first_tunnel_snake.State.RESTING, "The snake falls after the grace period and warning")
 	for frame in range(90):
 		await physics_frame
 	check(first_tunnel_snake.state == first_tunnel_snake.State.RESTING, "The triggered tunnel fall lands safely")
 	respawned_player.position = Vector2(2740, 935)
-	for frame in range(220):
+	var lower_a = current_scene.get_node("Walls/TunnelLowerSnakeA")
+	var lower_b = current_scene.get_node("Walls/TunnelLowerSnakeB")
+	var lower_wait := maxf(lower_a.drop_timer, lower_b.drop_timer)
+	for frame in range(ceili(lower_wait * 60.0) + 180):
 		await physics_frame
-	check(current_scene.get_node("Walls/TunnelLowerSnakeA").state == first_tunnel_snake.State.RESTING and current_scene.get_node("Walls/TunnelLowerSnakeB").state == first_tunnel_snake.State.RESTING, "The final tunnel also produces frequent visible falls")
+	check(lower_a.state == first_tunnel_snake.State.RESTING and lower_b.state == first_tunnel_snake.State.RESTING, "The final tunnel also uses the new delayed random falls")
 	respawned_player.position = current_scene.get_node("LevelExit").position
 	for frame in range(60):
 		await process_frame

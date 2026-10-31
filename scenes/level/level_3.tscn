@@ -318,8 +318,8 @@ body_length = 120.0
 sway_amplitude = 48.0
 bob_amplitude = 22.0
 motion_phase = 0.6
-min_drop_delay = 0.6
-max_drop_delay = 1.0
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 60, 1400, 260)
 
@@ -329,8 +329,8 @@ body_length = 142.0
 sway_amplitude = 24.0
 bob_amplitude = 14.0
 motion_phase = 2.8
-min_drop_delay = 1.1
-max_drop_delay = 1.8
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 60, 1400, 260)
 
@@ -340,8 +340,8 @@ body_length = 125.0
 sway_amplitude = 56.0
 bob_amplitude = 26.0
 motion_phase = 4.5
-min_drop_delay = 0.8
-max_drop_delay = 1.4
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 60, 1400, 260)
 
@@ -351,8 +351,8 @@ body_length = 105.0
 sway_amplitude = 44.0
 bob_amplitude = 20.0
 motion_phase = 1.8
-min_drop_delay = 0.5
-max_drop_delay = 1.1
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 440, 1680, 240)
 
@@ -362,8 +362,8 @@ body_length = 112.0
 sway_amplitude = 26.0
 bob_amplitude = 12.0
 motion_phase = 3.6
-min_drop_delay = 0.7
-max_drop_delay = 1.4
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 440, 1680, 240)
 
@@ -373,8 +373,8 @@ body_length = 75.0
 sway_amplitude = 22.0
 bob_amplitude = 10.0
 motion_phase = 2.3
-min_drop_delay = 0.7
-max_drop_delay = 1.1
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 800, 1680, 180)
 
@@ -384,8 +384,8 @@ body_length = 80.0
 sway_amplitude = 38.0
 bob_amplitude = 14.0
 motion_phase = 5.1
-min_drop_delay = 0.6
-max_drop_delay = 1.0
+min_drop_delay = 4.5
+drop_chance_growth = 0.18
 activation_distance = 430.0
 activation_region = Rect2(1760, 800, 1680, 180)
 

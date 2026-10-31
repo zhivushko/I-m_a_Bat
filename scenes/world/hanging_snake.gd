@@ -12,6 +12,7 @@ const WARNING_DURATION: float = 0.95
 @export var motion_phase: float = 0.0
 @export var min_drop_delay: float = 24.0
 @export var max_drop_delay: float = 44.0
+@export_range(0.0, 2.0, 0.01) var drop_chance_growth: float = 0.0
 @export_range(0.0, 700.0) var activation_distance: float = 0.0
 @export var activation_region: Rect2 = Rect2()
 
@@ -35,11 +36,12 @@ var body_segments: Array[CollisionShape2D] = []
 var damage_segments: Array[CollisionShape2D] = []
 var head_collision: CollisionShape2D
 var head_damage: CollisionShape2D
+var drop_rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	phase = motion_phase
-	var minimum_delay := maxf(0.1, min_drop_delay)
-	drop_timer = randf_range(minimum_delay, maxf(minimum_delay, max_drop_delay))
+	drop_rng.randomize()
+	drop_timer = _sample_drop_delay()
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = SONAR_SHADER
 	for line: Line2D in [outline, left_eye, right_eye, tongue, tongue_fork]:
@@ -54,6 +56,15 @@ func _ready() -> void:
 	head_damage = _add_circle(damage_area, 9.0)
 	damage_area.body_entered.connect(_on_body_entered)
 	_update_shape()
+
+func _sample_drop_delay() -> float:
+	var minimum_delay := maxf(0.1, min_drop_delay)
+	if drop_chance_growth > 0.0:
+		# Sample a growing per-second risk after the guaranteed grace period.
+		# Drawing the delay once keeps that risk independent of the frame rate.
+		var survival := maxf(1.0 - drop_rng.randf(), 0.000001)
+		return minimum_delay + sqrt(-2.0 * log(survival) / drop_chance_growth)
+	return drop_rng.randf_range(minimum_delay, maxf(minimum_delay, max_drop_delay))
 
 func _add_capsule(parent: Node, radius: float) -> CollisionShape2D:
 	var collision := CollisionShape2D.new()
