@@ -41,21 +41,21 @@ position = Vector2(1250, 400)
 polygon_points = PackedVector2Array(-30, -400, 30, -400, 30, 400, -30, 400)
 
 [node name="UpperPartition" parent="Walls" instance=ExtResource("5_wall")]
-position = Vector2(545, 310)
-polygon_points = PackedVector2Array(-35, -250, 35, -250, 35, 250, -35, 250)
+position = Vector2(545, 285)
+polygon_points = PackedVector2Array(-35, -225, 35, -225, 35, 225, -35, 225)
 
 [node name="LowerPartition" parent="Walls" instance=ExtResource("5_wall")]
-position = Vector2(905, 500)
-polygon_points = PackedVector2Array(-35, -240, 35, -240, 35, 240, -35, 240)
+position = Vector2(905, 530)
+polygon_points = PackedVector2Array(-35, -210, 35, -210, 35, 210, -35, 210)
 
 [node name="FirstPassageCeilingSpike" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(545, 560)
+position = Vector2(545, 510)
 rotation = 3.1415927
-scale = Vector2(1.458333, 1)
+scale = Vector2(1.1, 1)
 
 [node name="FirstPassageFloorSpike1" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(497, 740)
-scale = Vector2(1, 0.85)
+scale = Vector2(-1, 0.82)
 
 [node name="FirstPassageFloorSpike2" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(545, 740)
@@ -67,20 +67,21 @@ scale = Vector2(1, 0.92)
 [node name="ApproachSpike1" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(510, 350)
 rotation = -1.5707963
+scale = Vector2(1, 0.9)
 
 [node name="ApproachSpike2" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(510, 398)
 rotation = -1.5707963
-scale = Vector2(1, 0.85)
+scale = Vector2(-1, 0.85)
 
 [node name="SecondPassageFloorSpike" parent="Walls" instance=ExtResource("6_spike")]
-position = Vector2(905, 260)
-scale = Vector2(1.458333, 1)
+position = Vector2(905, 320)
+scale = Vector2(-1.1, 1)
 
 [node name="SecondPassageCeilingSpike1" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(857, 60)
 rotation = 3.1415927
-scale = Vector2(1, 0.9)
+scale = Vector2(-1, 0.9)
 
 [node name="SecondPassageCeilingSpike2" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(905, 60)
@@ -89,7 +90,7 @@ rotation = 3.1415927
 [node name="SecondPassageCeilingSpike3" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(953, 60)
 rotation = 3.1415927
-scale = Vector2(1, 0.8)
+scale = Vector2(-1, 0.8)
 
 [node name="DescentSpike1" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(940, 422)
@@ -98,7 +99,7 @@ rotation = 1.5707963
 [node name="DescentSpike2" parent="Walls" instance=ExtResource("6_spike")]
 position = Vector2(940, 470)
 rotation = 1.5707963
-scale = Vector2(1, 0.9)
+scale = Vector2(-1, 0.9)
 
 [node name="Player" parent="." unique_id=237330710 instance=ExtResource("2_player")]
 position = Vector2(160, 180)
