@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var next_level_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/NextLevelButton
 @onready var restart_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/RestartButton
 @onready var menu_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MenuButton
+@onready var main_menu_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainMenuButton
 
 var current_level_index: int = 1
 
@@ -19,6 +20,8 @@ func _ready() -> void:
 		restart_button.pressed.connect(_on_restart_button_pressed)
 	if menu_button:
 		menu_button.pressed.connect(_on_menu_button_pressed)
+	main_menu_button.pressed.connect(_on_main_menu_pressed)
+	next_level_button.grab_focus()
 
 func setup_screen(level_index: int, elapsed_time: float) -> void:
 	current_level_index = level_index
@@ -27,16 +30,17 @@ func setup_screen(level_index: int, elapsed_time: float) -> void:
 		time_label.text = "Время: " + format_time(elapsed_time)
 
 	var is_final_level = (level_index >= GameManager.max_levels)
+	main_menu_button.visible = not is_final_level
 
 	if title_label:
 		if is_final_level:
-			title_label.text = "🏆 Поздравляем!\nИгра пройдена!"
+			title_label.text = "Игра пройдена!"
 		else:
 			title_label.text = "Уровень " + str(level_index) + " пройден!"
 
 	if next_level_button:
 		if is_final_level:
-			next_level_button.text = "В главное меню"
+			next_level_button.text = "Главное меню"
 		else:
 			next_level_button.text = "Следующий уровень"
 
@@ -50,12 +54,12 @@ func animate_appearance() -> void:
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	if panel_container:
-		panel_container.scale = Vector2(0.7, 0.7)
+		panel_container.scale = Vector2(0.96, 0.96)
 		panel_container.pivot_offset = panel_container.size / 2.0
 		panel_container.modulate.a = 0.0
 		var panel_tween = create_tween().set_parallel(true)
-		panel_tween.tween_property(panel_container, "scale", Vector2.ONE, 0.4)\
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		panel_tween.tween_property(panel_container, "scale", Vector2.ONE, 0.22)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		panel_tween.tween_property(panel_container, "modulate:a", 1.0, 0.3)\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
@@ -68,7 +72,7 @@ func format_time(seconds: float) -> String:
 func _on_next_level_button_pressed() -> void:
 	get_tree().paused = false
 	if current_level_index >= GameManager.max_levels:
-		get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
+		MenuNavigation.open_main_menu()
 	else:
 		GameManager.complete_level(current_level_index)
 	queue_free()
@@ -80,5 +84,12 @@ func _on_restart_button_pressed() -> void:
 
 func _on_menu_button_pressed() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
+	MenuNavigation.open_level_select()
 	queue_free()
+
+func _on_main_menu_pressed() -> void:
+	MenuNavigation.open_main_menu()
+	queue_free()
+
+func navigate_back() -> void:
+	_on_menu_button_pressed()

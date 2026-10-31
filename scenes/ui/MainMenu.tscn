@@ -1,15 +1,19 @@
-[gd_scene format=3 uid="uid://cqh1wm0lybh0s"]
+[gd_scene load_steps=4 format=3 uid="uid://cqh1wm0lybh0s"]
 
 [ext_resource type="Script" uid="uid://uldnvqfufyu0" path="res://scenes/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cf06sdy4fri48" path="res://preview.jpg" id="2_6jbdy"]
 
+[ext_resource type="Theme" path="res://scenes/ui/menu_theme.tres" id="3_theme"]
+
 [node name="MainMenu" type="Control" unique_id=1725245834]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_theme")
 script = ExtResource("1_menu")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1524459263]
@@ -18,7 +22,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -648.0
+offset_left = -720.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("2_6jbdy")
@@ -41,18 +45,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 60
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 60
+theme_override_constants/margin_left = 66
+theme_override_constants/margin_top = 66
+theme_override_constants/margin_right = 66
+theme_override_constants/margin_bottom = 66
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=712810962]
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 44
 alignment = 1
 
 [node name="LogoTexture" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=898975268]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -64,31 +68,31 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 54
 text = "ECHOLOCATION IN DARKNESS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MenuContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1318533963]
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(312, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 16
+theme_override_constants/separation = 18
 
 [node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=180198388]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Играть"
 
 [node name="SettingsButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=1297988373]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Настройки"
 
 [node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer/MenuContainer" unique_id=1178955569]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Выход"

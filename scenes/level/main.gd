@@ -1,17 +1,22 @@
 extends Node2D
 
+const MOBILE_CONTROLS: PackedScene = preload("res://scenes/ui/MobileControls.tscn")
+
 var level_time: float = 0.0
 
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var player: CharacterBody2D = $Player
 @onready var walls_container: Node2D = $Walls
-@onready var ambient: AudioStreamPlayer = $AmbientHum
-@onready var audio_points: Node2D = $AudioPoints
+@onready var ambient: AudioStreamPlayer = get_node_or_null("AmbientHum")
+@onready var audio_points: Node2D = get_node_or_null("AudioPoints")
 
 var wall_scene: PackedScene = preload("res://scenes/world/Wall.tscn")
 
 func _ready() -> void:
 	level_time = 0.0
+	var controls := MOBILE_CONTROLS.instantiate()
+	$UI.add_child(controls)
+	controls.bind_player(player)
 	RenderingServer.set_default_clear_color(Color.BLACK)
 	if canvas_modulate:
 		canvas_modulate.color = Color(0, 0, 0, 1)

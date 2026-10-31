@@ -12,6 +12,7 @@ const DEATH_EFFECT: PackedScene = preload("res://scenes/fx/DeathEffect.tscn")
 
 var step_timer: float = 0.0
 var is_dead: bool = false
+var mobile_movement: Vector2 = Vector2.ZERO
 
 @onready var light: PointLight2D = $PointLight2D
 @onready var contour_line: Line2D = $Line2D
@@ -87,6 +88,8 @@ func _physics_process(delta: float) -> void:
 		var dx = (1.0 if Input.is_key_pressed(KEY_D) else 0.0) - (1.0 if Input.is_key_pressed(KEY_A) else 0.0)
 		var dy = (1.0 if Input.is_key_pressed(KEY_S) else 0.0) - (1.0 if Input.is_key_pressed(KEY_W) else 0.0)
 		input_dir = Vector2(dx, dy).normalized()
+	if mobile_movement != Vector2.ZERO:
+		input_dir = mobile_movement
 
 	velocity = input_dir * speed
 	move_and_slide()
@@ -99,16 +102,10 @@ func _physics_process(delta: float) -> void:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
+			play_wing_flap_sound()
 			#spawn_sound_wave(3.5, 2.0, 24, 1.2)
 	else:
 		step_timer = step_interval
-
-	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_SPACE):
-		if not get_meta("stomp_triggered_this_frame", false):
-			set_meta("stomp_triggered_this_frame", true)
-			stomp()
-	else:
-		set_meta("stomp_triggered_this_frame", false)
 
 func play_wing_flap_sound() -> void:
 	if wing_flap_audio:
@@ -152,9 +149,12 @@ func update_animation(input_dir: Vector2) -> void:
 			animated_sprite.play("default")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_SPACE:
-			stomp()
+	if event.is_action_pressed("ui_accept") and not event.is_echo():
+		stomp()
+		get_viewport().set_input_as_handled()
+
+func set_mobile_movement(direction: Vector2) -> void:
+	mobile_movement = direction.limit_length(1.0)
 
 func stomp() -> void:
 	if is_dead:
@@ -192,6 +192,7 @@ func die() -> void:
 	if is_dead or get_tree().paused:
 		return
 	is_dead = true
+	mobile_movement = Vector2.ZERO
 	velocity = Vector2.ZERO
 	set_physics_process(false)
 	set_process_unhandled_input(false)
