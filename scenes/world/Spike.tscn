@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/Wall.tscn" id="1_wall"]
+[ext_resource type="Script" path="res://scenes/world/spike.gd" id="2_spike"]
+
+[node name="Spike" instance=ExtResource("1_wall")]
+script = ExtResource("2_spike")
+polygon_points = PackedVector2Array(-14, 0, -8, -13, -12, -20, -5, -17, -2, -48, 4, -24, 10, -28, 7, -14, 14, 0)
+
+[node name="DamageArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="DamageArea"]
+polygon = PackedVector2Array(-18, 4, -2, -52, 18, 4)
