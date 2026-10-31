@@ -1,14 +1,18 @@
 extends Node2D
 
 @export var max_scale: float = 8.0
+@export var max_radius: float = 600.0
 @export var max_energy: float = 3.0
-@export var expand_duration: float = 0.6  # Время расширения волны на 100% яркости до конца
-@export var fade_duration: float = 1.5    # Время плавного затухания энергии ПОСЛЕ достижения конца
+@export var expand_duration: float = 0.6  # Время расширения сплошного круга до max_scale
+@export var fade_duration: float = 1.5    # Время угасания энергии ПОСЛЕ завершения роста
 @export var ray_count: int = 64
 @export var wall_reveal_duration: float = 3.0
 @export var spawn_echo_points: bool = true
 
-# Свойство duration для совместимости с player.gd
+var current_radius: float = 0.0
+var global_alpha: float = 1.0
+
+# Свойство duration для совместимости с вызовами из player.gd
 var duration: float:
 	get:
 		return fade_duration
@@ -20,11 +24,9 @@ var duration: float:
 @onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
 
 var echo_point_scene: PackedScene = preload("res://scenes/fx/EchoPoint.tscn")
-var current_radius: float = 0.0
-var current_intensity: float = 1.0
 
 func _ready() -> void:
-	ensure_ring_texture()
+	ensure_circle_texture()
 
 	if light:
 		light.energy = max_energy
@@ -34,46 +36,45 @@ func _ready() -> void:
 	if collision_shape and collision_shape.shape is CircleShape2D:
 		collision_shape.shape.radius = 10.0
 
-	# Последовательная двухфазная анимация волны
 	var tween = create_tween()
 
-	# ФАЗА 1: Волна быстро расширяется до края на 100% ПОЛНОЙ яркости
+	# ФАЗА 1: Сплошной заполненный круг света расширяется от 0.1 до max_scale на 100% яркости
 	tween.tween_property(light, "texture_scale", max_scale, expand_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(self, "current_radius", max_radius, expand_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-	# ФАЗА 2: ТОЛЬКО ПОСЛЕ достижения конца энергия волны плавно гаснет до 0
+	# ФАЗА 2: ТОЛЬКО ПОСЛЕ завершения роста гасим энергию света и общую прозрачность
 	tween.tween_property(light, "energy", 0.0, fade_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(self, "global_alpha", 0.0, fade_duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	# Удаляем узел после завершения затухания
+	# Удаление узла после полного затухания
 	tween.tween_callback(queue_free)
 
 	call_deferred("cast_echolocation_rays")
 
 func _process(_delta: float) -> void:
-	if light:
-		current_radius = light.texture_scale * 128.0
-		current_intensity = light.energy / max_energy if max_energy > 0.0 else 0.0
-		if collision_shape and collision_shape.shape is CircleShape2D:
-			collision_shape.shape.radius = current_radius
+	if collision_shape and collision_shape.shape is CircleShape2D:
+		collision_shape.shape.radius = current_radius
 
-func ensure_ring_texture() -> void:
+func ensure_circle_texture() -> void:
 	if light and light.texture == null:
-		light.texture = create_ring_texture()
+		light.texture = create_circle_texture()
 
-func create_ring_texture() -> GradientTexture2D:
+func create_circle_texture() -> GradientTexture2D:
 	var tex = GradientTexture2D.new()
 	tex.fill = GradientTexture2D.FILL_RADIAL
 	tex.fill_from = Vector2(0.5, 0.5)
 	tex.fill_to = Vector2(0.5, 0.0)
 
 	var grad = Gradient.new()
-	grad.offsets = PackedFloat32Array([0.0, 0.75, 0.88, 0.96, 1.0])
+	# СПЛОШНОЙ ЗАПОЛНЕННЫЙ КРУГ СВЕТА (БЕЗ ДЫРКИ / БУБЛИКА В ЦЕНТРЕ)
+	grad.offsets = PackedFloat32Array([0.0, 0.85, 1.0])
 	grad.colors = PackedColorArray([
-		Color(0.0, 0.0, 0.0, 0.0),
-		Color(0.0, 0.0, 0.0, 0.0),
 		Color(1.0, 1.0, 1.0, 1.0),
-		Color(1.0, 1.0, 1.0, 0.8),
+		Color(1.0, 1.0, 1.0, 1.0),
 		Color(0.0, 0.0, 0.0, 0.0)
 	])
 
@@ -87,7 +88,6 @@ func cast_echolocation_rays() -> void:
 		return
 
 	var space_state = get_world_2d().direct_space_state
-	var actual_max_dist = max_scale * 80.0
 	var angle_step = (2.0 * PI) / float(ray_count)
 
 	for i in range(ray_count):
@@ -95,7 +95,7 @@ func cast_echolocation_rays() -> void:
 		var ray_dir = Vector2(cos(angle), sin(angle))
 		var query = PhysicsRayQueryParameters2D.create(
 			global_position,
-			global_position + ray_dir * actual_max_dist
+			global_position + ray_dir * max_radius
 		)
 		query.exclude = [self]
 

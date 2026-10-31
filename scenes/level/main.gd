@@ -30,20 +30,22 @@ func update_sonar_shader_on_walls() -> void:
 
 	var centers: Array = []
 	var radii: Array = []
-	var thicknesses: Array = []
-	var intensities: Array = []
+	var max_radii: Array = []
+	var alphas: Array = []
 
 	for child in get_children():
 		if child.has_method("cast_echolocation_rays") and child.get("current_radius") != null:
 			if centers.size() < 8:
 				centers.append(child.global_position)
 				radii.append(child.get("current_radius"))
-				thicknesses.append(35.0)
-				intensities.append(child.get("current_intensity"))
+				var max_r = child.get("max_radius")
+				max_radii.append(max_r if max_r != null else 600.0)
+				var g_alpha = child.get("global_alpha")
+				alphas.append(g_alpha if g_alpha != null else 1.0)
 
 	for wall in walls_container.get_children():
 		if wall.has_method("update_sonar_waves"):
-			wall.update_sonar_waves(centers, radii, thicknesses, intensities)
+			wall.update_sonar_waves(centers, radii, max_radii, alphas)
 
 func build_test_maze() -> void:
 	var wall_data = [

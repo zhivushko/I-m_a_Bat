@@ -47,7 +47,7 @@ func setup_wall() -> void:
 		line_2d.width = 3.0
 		line_2d.default_color = Color.WHITE
 
-		var sonar_shader = load("res://assets/shaders/sonar.gdshader")
+		var sonar_shader = load("res://assets/shaders/echo_wave.gdshader")
 		if sonar_shader:
 			shader_material = ShaderMaterial.new()
 			shader_material.shader = sonar_shader
@@ -72,10 +72,10 @@ func reveal(duration: float = 3.0) -> void:
 		reveal_tween.tween_property(line_2d, "modulate:a", 0.0, duration)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-func update_sonar_waves(centers: Array, radii: Array, thicknesses: Array, intensities: Array) -> void:
+func update_sonar_waves(centers: Array, radii: Array, max_radii: Array, alphas: Array) -> void:
 	if shader_material:
 		shader_material.set_shader_parameter("wave_centers", centers)
 		shader_material.set_shader_parameter("wave_radii", radii)
-		shader_material.set_shader_parameter("wave_thicknesses", thicknesses)
-		shader_material.set_shader_parameter("wave_intensities", intensities)
+		shader_material.set_shader_parameter("max_radii", max_radii)
+		shader_material.set_shader_parameter("global_alphas", alphas)
 		shader_material.set_shader_parameter("active_waves_count", centers.size())

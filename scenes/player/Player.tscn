@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bonyv8ud7g4x" path="res://scenes/player/player.gd" id="1_player"]
 [ext_resource type="Texture2D" uid="uid://banjj6dkda50l" path="res://Изображение ChatGPT 30 окт. 2026 г., 22_51_37.png" id="2_gfjak"]
+[ext_resource type="AudioStream" uid="uid://beaaon56p0gmw" path="res://sound/untitled folder/Крик_6_min_gaint_1.wav" id="3_4kuee"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 14.0
@@ -69,3 +70,8 @@ sprite_frames = SubResource("SpriteFrames_6lnei")
 animation = &"move"
 frame = 2
 frame_progress = 0.536167
+
+[node name="WingFlapAudio" type="AudioStreamPlayer2D" parent="." unique_id=1317851821]
+
+[node name="ScreechAudio" type="AudioStreamPlayer2D" parent="." unique_id=65863235]
+stream = ExtResource("3_4kuee")
