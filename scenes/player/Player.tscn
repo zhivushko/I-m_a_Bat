@@ -56,6 +56,7 @@ script = ExtResource("1_player")
 shape = SubResource("CircleShape2D_player")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1876232008]
+visible = false
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1456641612]
 energy = 0.5
@@ -65,8 +66,7 @@ position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=783486957]
-visible = false
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_6lnei")
 animation = &"move"
 frame = 2

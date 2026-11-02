@@ -97,11 +97,14 @@ func _physics_process(delta: float) -> void:
 	update_animation(input_dir)
 
 	update_wing_flap_audio(velocity.length() > 10.0)
-
+	
+	update_tilt(input_dir)
+	
 	if velocity.length() > 10.0:
 		step_timer += delta
 		if step_timer >= step_interval:
 			step_timer = 0.0
+			spawn_sound_wave(1.5, 0.5, 32, 0.8)
 	else:
 		step_timer = step_interval
 	
@@ -139,19 +142,10 @@ func update_animation(input_dir: Vector2) -> void:
 		if animated_sprite:
 			animated_sprite.flip_h = (input_dir.x < 0)
 
-		if frames.has_animation("walk"):
-			animated_sprite.play("walk")
-		elif frames.has_animation("move"):
-			animated_sprite.play("move")
-		elif frames.has_animation("new_animation"):
-			animated_sprite.play("new_animation")
-		elif frames.has_animation("default"):
-			animated_sprite.play("default")
-	else:
-		if frames.has_animation("idle"):
-			animated_sprite.play("idle")
-		elif frames.has_animation("default"):
-			animated_sprite.play("default")
+		
+	if frames.has_animation("move"):
+		animated_sprite.play("move")
+		
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not event.is_echo():
@@ -165,14 +159,10 @@ func stomp() -> void:
 	if is_dead:
 		return
 	play_screech_sound()
-	spawn_sound_wave(8.5, 3.5, 64, 1.5)
+	spawn_sound_wave(2, 1, 64, 1)
 	shake_camera()
 
-	if animated_sprite and animated_sprite.sprite_frames:
-		if animated_sprite.sprite_frames.has_animation("stomp"):
-			animated_sprite.play("stomp")
-		elif animated_sprite.sprite_frames.has_animation("attack"):
-			animated_sprite.play("attack")
+	
 
 func shake_camera() -> void:
 	if camera:
@@ -191,6 +181,8 @@ func spawn_sound_wave(max_scale: float, energy: float, num_rays: int, duration: 
 	wave.max_energy = energy
 	wave.ray_count = num_rays
 	wave.fade_duration = duration
+	wave.max_radius = 100
+	print("[player] max_radius set to ", wave.max_radius)
 	get_parent().add_child(wave)
 
 func die() -> void:
@@ -231,3 +223,36 @@ func update_wing_flap_audio(is_moving: bool) -> void:
 			wing_flap_audio.stop()
 			wing_flap_audio.set_meta("fading_out", false)
 		)
+func update_tilt(input_dir: Vector2) -> void:
+	if animated_sprite == null:
+		return
+		
+	var target_rotation: float = 0.0
+	
+	if input_dir != Vector2.ZERO:
+		# Получаем угол вектора движения (в радианах)
+		var angle_rad = input_dir.angle()
+		
+		# Если персонаж движется ВПРАВО (или вправо-вверх/вниз)
+		if input_dir.x > 0:
+			# В Godot ось Y смотрит вниз, поэтому чтобы наклонить нос ВВЕРХ, 
+			# нужно вычесть угол из 0 (или прибавить отрицательный).
+			# Вправо-вверх (y < 0) даст нам отрицательный угол (поворот против часовой).
+			target_rotation = angle_rad
+			
+		# Если персонаж движется ВЛЕВО (спрайт отражен)
+		elif input_dir.x < 0:
+			# Из-за flip_h текстура смотрит влево. 
+			# Чтобы наклонить нос ВВЕРХ (против часовой стрелки визуально),
+			# нужно инвертировать угол по оси Y.
+			target_rotation = -angle_rad
+			
+		# Если летит строго вверх или вниз (x == 0)
+		else:
+			target_rotation = 0.0
+			
+		# Ограничиваем максимальный наклон, чтобы не было кувырков через голову.
+		# Например, чтобы нос не задирался выше 45 градусов (PI/4) от горизонтали.
+		target_rotation = clamp(target_rotation, -PI / 4.0, PI / 4.0)
+		
+	animated_sprite.rotation = target_rotation

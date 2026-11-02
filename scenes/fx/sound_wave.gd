@@ -1,18 +1,17 @@
 extends Node2D
 
-@export var max_scale: float = 8.0
-@export var max_radius: float = 600.0
-@export var max_energy: float = 3.0
-@export var expand_duration: float = 0.6  # Время расширения сплошного круга до max_scale
-@export var fade_duration: float = 1.5    # Время угасания энергии ПОСЛЕ завершения роста
-@export var ray_count: int = 64
-@export var wall_reveal_duration: float = 3.0
+@export var max_scale: float = 1.0
+@export var max_radius: float = 200.0   # ← ЕДИНСТВЕННОЕ место, где задаётся максимум
+@export var max_energy: float = 1.0
+@export var expand_duration: float = 0.3
+@export var fade_duration: float = 0.4
+@export var ray_count: int = 128
+@export var wall_reveal_duration: float = 0.5
 @export var spawn_echo_points: bool = true
 
 var current_radius: float = 0.0
 var global_alpha: float = 1.0
 
-# Свойство duration для совместимости с вызовами из player.gd
 var duration: float:
 	get:
 		return fade_duration
@@ -38,19 +37,16 @@ func _ready() -> void:
 
 	var tween = create_tween()
 
-	# ФАЗА 1: Сплошной заполненный круг света расширяется от 0.1 до max_scale на 100% яркости
 	tween.tween_property(light, "texture_scale", max_scale, expand_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "current_radius", max_radius, expand_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-	# ФАЗА 2: ТОЛЬКО ПОСЛЕ завершения роста гасим энергию света и общую прозрачность
 	tween.tween_property(light, "energy", 0.0, fade_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(self, "global_alpha", 0.0, fade_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	# Удаление узла после полного затухания
 	tween.tween_callback(queue_free)
 
 	call_deferred("cast_echolocation_rays")
@@ -70,7 +66,6 @@ func create_circle_texture() -> GradientTexture2D:
 	tex.fill_to = Vector2(0.5, 0.0)
 
 	var grad = Gradient.new()
-	# СПЛОШНОЙ ЗАПОЛНЕННЫЙ КРУГ СВЕТА (БЕЗ ДЫРКИ / БУБЛИКА В ЦЕНТРЕ)
 	grad.offsets = PackedFloat32Array([0.0, 0.85, 1.0])
 	grad.colors = PackedColorArray([
 		Color(1.0, 1.0, 1.0, 1.0),

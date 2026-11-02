@@ -1,9 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqh1wm0lybh0s"]
+[gd_scene format=3 uid="uid://cqh1wm0lybh0s"]
 
 [ext_resource type="Script" uid="uid://uldnvqfufyu0" path="res://scenes/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cf06sdy4fri48" path="res://preview.jpg" id="2_6jbdy"]
-
-[ext_resource type="Theme" path="res://scenes/ui/menu_theme.tres" id="3_theme"]
+[ext_resource type="Theme" uid="uid://3jmvrk2mrtx5" path="res://scenes/ui/menu_theme.tres" id="3_theme"]
 
 [node name="MainMenu" type="Control" unique_id=1725245834]
 process_mode = 3
@@ -69,7 +68,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 54
-text = "ECHOLOCATION IN DARKNESS"
+text = "I'm a Bat"
 horizontal_alignment = 1
 vertical_alignment = 1
 
